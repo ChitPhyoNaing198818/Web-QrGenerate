@@ -157,7 +157,7 @@
             <div class="space-y-3">
                 <div id="btn-index" onclick="switchTemplateFile('lovecard.html', 'btn-index')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
                     <div class="bg-slate-100 dark:bg-slate-800 text-pink-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-envelope text-lg"></i></div>
-                    <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Digital Love Card</h3><p class="text-[11px] text-slate-400">index.html</p></div>
+                    <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Digital Love Card</h3><p class="text-[11px] text-slate-400">lovecard.html</p></div>
                 </div>
 
                 <div id="btn-cv" onclick="switchTemplateFile('cv.html', 'btn-cv')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
@@ -180,7 +180,7 @@
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Happy Anniversary</h3><p class="text-[11px] text-slate-400">anniversary.html</p></div>
                 </div>
 
-                </div>
+            </div>
         </aside>
 
         <main id="previewViewportContainer" class="col-span-1 lg:col-span-9 flex flex-col items-center w-full">
@@ -281,7 +281,6 @@
         let setupCompleted = false;
         let stateDataStorage = {};
         let activeSelectedFile = "";
-        let lastKnownSnapshotHTML = "";
         let qrCodeInstance = null;
 
         function switchTemplateFile(fileName, cardId) {
@@ -328,37 +327,37 @@
             if (event.data.type === 'REGISTER_MANIFEST') {
                 buildDynamicStudioForm(event.data.schema);
             }
-            if (event.data.type === 'HTML_SNAPSHOT') {
-                lastKnownSnapshotHTML = event.data.html;
-            }
         });
 
         function buildDynamicStudioForm(schema) {
             const container = document.getElementById('dynamicFormContainer');
             container.innerHTML = '';
+            
+            // Keep previous states if layout reloads, otherwise set defaults
+            const originalStorage = { ...stateDataStorage };
             stateDataStorage = {};
 
             schema.forEach(field => {
-                stateDataStorage[field.id] = field.defaultValue || '';
+                stateDataStorage[field.id] = originalStorage[field.id] !== undefined ? originalStorage[field.id] : (field.defaultValue || '');
                 const fieldWrapper = document.createElement('div');
                 fieldWrapper.className = "space-y-1.5 text-left";
                 fieldWrapper.innerHTML = `<label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider"><i class="${field.icon || 'fa-solid fa-gear'} text-indigo-500 mr-1.5"></i> ${field.label}</label>`;
 
                 if (field.type === 'text') {
                     const input = document.createElement('input');
-                    input.type = 'text'; input.value = field.defaultValue || '';
+                    input.type = 'text'; input.value = stateDataStorage[field.id];
                     input.className = "w-full px-4 py-2.5 bg-slate-50 focus:bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition";
                     input.addEventListener('input', (e) => updateStateAndSync(field.id, e.target.value));
                     fieldWrapper.appendChild(input);
                 } else if (field.type === 'textarea') {
                     const textarea = document.createElement('textarea');
-                    textarea.rows = 3; textarea.value = field.defaultValue || '';
+                    textarea.rows = 3; textarea.value = stateDataStorage[field.id];
                     textarea.className = "w-full px-4 py-2.5 bg-slate-50 focus:bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none";
                     textarea.addEventListener('input', (e) => updateStateAndSync(field.id, e.target.value));
                     fieldWrapper.appendChild(textarea);
                 } else if (field.type === 'color') {
                     const colorInput = document.createElement('input');
-                    colorInput.type = 'color'; colorInput.value = field.defaultValue || '#ffffff';
+                    colorInput.type = 'color'; colorInput.value = stateDataStorage[field.id] || '#ffffff';
                     colorInput.className = "w-full h-11 p-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer outline-none focus:ring-2 focus:ring-indigo-500 transition";
                     colorInput.addEventListener('input', (e) => updateStateAndSync(field.id, e.target.value));
                     fieldWrapper.appendChild(colorInput);
@@ -370,7 +369,7 @@
                             const option = document.createElement('option');
                             option.value = typeof opt === 'object' ? opt.value : opt;
                             option.textContent = typeof opt === 'object' ? opt.label : opt;
-                            if (option.value === field.defaultValue) option.selected = true;
+                            if (option.value === stateDataStorage[field.id]) option.selected = true;
                             select.appendChild(option);
                         });
                     }
@@ -385,7 +384,7 @@
                     range.min = field.min !== undefined ? field.min : 0;
                     range.max = field.max !== undefined ? field.max : 100;
                     range.step = field.step !== undefined ? field.step : 1;
-                    range.value = field.defaultValue !== undefined ? field.defaultValue : range.min;
+                    range.value = stateDataStorage[field.id] || range.min;
                     range.className = "flex-1 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500";
                     
                     const monitor = document.createElement('span');
@@ -413,9 +412,10 @@
                         const file = this.files[0];
                         if (file) {
                             document.getElementById(`lbl-${slotId}`).innerText = file.name;
-                            const reader = new FileReader();
-                            reader.onload = function(e) { updateStateAndSync(field.id, e.target.result); };
-                            reader.readAsDataURL(file);
+                            
+                            // 🛠️ FIX: FileReader Base64 အစား စွမ်းဆောင်ရည်အလွန်မြင့်မားသော Object URL ကို ပြောင်းလဲအသုံးပြုခြင်း
+                            const objectUrl = URL.createObjectURL(file);
+                            updateStateAndSync(field.id, objectUrl);
                         }
                     });
                     fieldWrapper.appendChild(fileWrapper);
@@ -432,64 +432,68 @@
 
         function dispatchDataToIframe() {
             const iframe = document.getElementById('previewIframe');
-            if (!iframe.contentWindow || iframe.src === 'about:blank') return;
+            if (!iframe || !iframe.contentWindow || iframe.src === 'about:blank') return;
             iframe.contentWindow.postMessage({ type: 'UPDATE_DATA', payload: stateDataStorage }, '*');
-            iframe.contentWindow.postMessage({ type: 'REQUEST_SNAPSHOT' }, '*');
         }
 
         document.getElementById('previewIframe').addEventListener('load', dispatchDataToIframe);
 
-    function generateVercelNativeRouteLink() {
-    const deployBtn = document.getElementById('deployBtn');
-    const deployBtnText = document.getElementById('deployBtnText');
-    deployBtn.disabled = true; 
-    deployBtnText.innerText = "Generating live URL...";
+        function generateVercelNativeRouteLink() {
+            const deployBtn = document.getElementById('deployBtn');
+            const deployBtnText = document.getElementById('deployBtnText');
+            deployBtn.disabled = true; 
+            deployBtnText.innerText = "Generating live URL...";
 
-    let targetedLiveUrl = "";
+            let targetedLiveUrl = "";
 
-    try {
-        const currentOrigin = window.location.origin;
-        let targetFile = (typeof activeSelectedFile !== 'undefined' && activeSelectedFile) ? activeSelectedFile : 'index.html';
-        targetedLiveUrl = `${currentOrigin}/${targetFile}`;
-        
-        if (Object.keys(stateDataStorage).length > 0) {
-            const jsonString = JSON.stringify(stateDataStorage);
-            const utf8Bytes = new TextEncoder().encode(jsonString);
-            let binaryString = "";
-            for (let i = 0; i < utf8Bytes.length; i++) {
-                binaryString += String.fromCharCode(utf8Bytes[i]);
-            }
-            const base64Payload = btoa(binaryString);
-            targetedLiveUrl += `?studio_payload=${base64Payload}`;
-        }
-
-        // Standard အတိုင်း QR Code Modal ကို ဖွင့်လှစ်ရန် ကြိုးစားခြင်း
-        showQRModalStudio(targetedLiveUrl);
-
-    } catch (error) {
-        console.error("Link Generation Error:", error);
-        
-        // ✨ [CRITICAL FALLBACK] QR Code ဆောက်ရာတွင် စာလုံးရေ Overflow ဖြစ်ခဲ့လျှင် လင့်ခ်စာသားကို တိုက်ရိုက်ထုတ်ပေးရန်
-        if (targetedLiveUrl) {
-            const qrModal = document.getElementById("qrModal");
-            const qrContainer = document.getElementById("qrContainer");
-            const generatedLinkInput = document.getElementById("generatedLinkInput");
-
-            if (qrModal && generatedLinkInput) {
-                generatedLinkInput.value = targetedLiveUrl;
-                if (qrContainer) {
-                    qrContainer.innerHTML = "<div class='text-red-400 text-xs p-4 border border-dashed border-red-500 rounded-xl bg-red-950/30'>⚠️ စာသားပမာဏ များပြားလွန်းသဖြင့် QR Code ရုပ်ပုံ မထုတ်ပေးနိုင်သော်လည်း သင့်ဝဘ်ဆိုက်လင့်ခ်ကို အောက်တွင် အောင်မြင်စွာ တည်ဆောက်ပြီးပါပြီ။ လင့်ခ်ကို ကူးယူအသုံးပြုနိုင်ပါသည်။</div>";
+            try {
+                const currentOrigin = window.location.origin;
+                let targetFile = (typeof activeSelectedFile !== 'undefined' && activeSelectedFile) ? activeSelectedFile : 'lovecard.html';
+                targetedLiveUrl = `${currentOrigin}/${targetFile}`;
+                
+                // Payload ထဲမှ Blob URL များသည် Local သာဖြစ်၍ QR Code ထုတ်ရာတွင် Error မတက်စေရန် စစ်ထုတ်ပေးခြင်း
+                const cleanState = { ...stateDataStorage };
+                for (let key in cleanState) {
+                    if (typeof cleanState[key] === 'string' && cleanState[key].startsWith('blob:')) {
+                        delete cleanState[key]; // Cloud Deploy သည့်အခါ ပုံများကို CDN ပေါ်တင်ပြီး URL ပြောင်းပေးရန်လိုအပ်ပါသည်
+                    }
                 }
-                qrModal.classList.remove("hidden");
-                return;
+
+                if (Object.keys(cleanState).length > 0) {
+                    const jsonString = JSON.stringify(cleanState);
+                    const utf8Bytes = new TextEncoder().encode(jsonString);
+                    let binaryString = "";
+                    for (let i = 0; i < utf8Bytes.length; i++) {
+                        binaryString += String.fromCharCode(utf8Bytes[i]);
+                    }
+                    const base64Payload = btoa(binaryString);
+                    targetedLiveUrl += `?studio_payload=${base64Payload}`;
+                }
+
+                showQRModalStudio(targetedLiveUrl);
+
+            } catch (error) {
+                console.error("Link Generation Error:", error);
+                if (targetedLiveUrl) {
+                    const qrModal = document.getElementById("qrModal");
+                    const qrcodeCanvas = document.getElementById("qrcodeCanvas");
+                    const generatedLinkInput = document.getElementById("generatedLinkInput");
+
+                    if (qrModal && generatedLinkInput) {
+                        generatedLinkInput.value = targetedLiveUrl;
+                        if (qrcodeCanvas) {
+                            qrcodeCanvas.innerHTML = "<div class='text-red-400 text-xs p-4 border border-dashed border-red-500 rounded-xl bg-red-950/30'>⚠️ စာသားပမာဏ များပြားလွန်းသဖြင့် QR Code ရုပ်ပုံ မထုတ်ပေးနိုင်သော်လည်း သင့်ဝဘ်ဆိုက်လင့်ခ်ကို အောက်တွင် အောင်မြင်စွာ တည်ဆောက်ပြီးပါပြီ။ လင့်ခ်ကို ကူးယူအသုံးပြုနိုင်ပါသည်။</div>";
+                        }
+                        qrModal.classList.remove("hidden");
+                        return;
+                    }
+                }
+                alert("Link တည်ဆောက်မှု အဆင်မပြေဖြစ်သွားပါပြီ။ ထပ်မံကြိုးစားကြည့်ပေးပါဗျာ။");
+            } finally {
+                deployBtn.disabled = false; 
+                deployBtnText.innerText = "Website Link နှင့် QR ကုဒ် ရယူမည်";
             }
         }
-        alert("Link တည်ဆောက်မှု အဆင်မပြေဖြစ်သွားပါပြီ။ ထပ်မံကြိုးစားကြည့်ပေးပါဗျာ။");
-    } finally {
-        deployBtn.disabled = false; 
-        deployBtnText.innerText = "Website Link နှင့် QR ကုဒ် ရယူမည်";
-    }
-}
 
         function showQRModalStudio(url) {
             document.getElementById("generatedLinkInput").value = url;
@@ -508,6 +512,7 @@
 
         function regenerateCustomQR() {
             const qrContainer = document.getElementById("qrcodeCanvas");
+            if(!qrContainer) return;
             qrContainer.innerHTML = "";
             const dotColor = document.getElementById("qrDotColor").value;
             const dotStyle = document.getElementById("qrDotStyle").value;
