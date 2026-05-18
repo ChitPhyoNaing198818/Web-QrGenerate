@@ -318,8 +318,8 @@
             }
         });
 
-        // ⚡ IMAGE COMPRESSION FUNCTION (ဓာတ်ပုံအရွယ်အစားချုံ့ပေးသည့် အပိုင်း)
-        function compressAndProcessImage(file, callback) {
+        // ⚡ HIGH PERFORMANCE COMPRESSION (Blob Object URL ကိုသုံးပြီး စက္ကန့်ပိုင်းအတွင်း ပုံဖတ်သည့်စနစ်)
+        function compressToBlobUrl(file, callback) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function (event) {
@@ -329,23 +329,34 @@
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
 
-                    // အများဆုံး Resolution ကို Width 800px အထိပဲ ထားရှိပြီး ချုံ့မည်
-                    const MAX_WIDTH = 800;
+                    // Maximum bounding box resolution 700px (မိုဘိုင်းဖုန်းပေါ်တွင် အလွန်ကြည်လင်ပြီး ပေါ့ပါးစေရန်)
+                    const MAX_BOUND = 700;
                     let width = img.width;
                     let height = img.height;
 
-                    if (width > MAX_WIDTH) {
-                        height = Math.round((height * MAX_WIDTH) / width);
-                        width = MAX_WIDTH;
+                    if (width > height) {
+                        if (width > MAX_BOUND) {
+                            height = Math.round((height * MAX_BOUND) / width);
+                            width = MAX_BOUND;
+                        }
+                    } else {
+                        if (height > MAX_BOUND) {
+                            width = Math.round((width * MAX_BOUND) / height);
+                            height = MAX_BOUND;
+                        }
                     }
 
                     canvas.width = width;
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Image Quality ကို 70% ဖြင့် Base64 အဖြစ် ပြောင်းလဲထုတ်ယူခြင်း (ပေါ့ပါးမြန်ဆန်သွားစေရန်)
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                    callback(compressedBase64);
+                    // 💡 Base64 အစား နေရာမစားဘဲ ချက်ချင်းပေါ်စေမည့် Lightweight Blob ထုတ်လုပ်ခြင်း
+                    canvas.toBlob(function(blob) {
+                        if(blob) {
+                            const lightweightBlobUrl = URL.createObjectURL(blob);
+                            callback(lightweightBlobUrl);
+                        }
+                    }, 'image/jpeg', 0.65); // Quality 65% ဖြင့် ဖိုင်ဆိုဒ်ကို KB အနည်းငယ်သာဖြစ်အောင် ချုံ့လိုက်သည်
                 };
             };
         }
@@ -431,16 +442,15 @@
                     fileWrapper.querySelector('input').addEventListener('change', function() {
                         const file = this.files[0];
                         if (file) {
-                            document.getElementById(`lbl-${slotId}`).innerText = "Processing/Compressing...";
+                            document.getElementById(`lbl-${slotId}`).innerText = "Compressing...";
                             
                             if (field.type === 'image') {
-                                // ဓာတ်ပုံဖြစ်လျှင် အရည်အသွေးမကျဘဲ စက္ကန့်ပိုင်းအတွင်း ချက်ချင်းချုံ့မည်
-                                compressAndProcessImage(file, function(compressedUrl) {
-                                    document.getElementById(`lbl-${slotId}`).innerText = file.name + " (Compressed)";
-                                    updateStateAndSync(field.id, compressedUrl);
+                                // ⚡ စက္ကန့်ပိုင်းအတွင်း အလုပ်လုပ်မည့် Blob URL စနစ်ဖြင့် ချုံ့ခြင်း
+                                compressToBlobUrl(file, function(lightweightBlobUrl) {
+                                    document.getElementById(`lbl-${slotId}`).innerText = file.name + " (Ready)";
+                                    updateStateAndSync(field.id, lightweightBlobUrl);
                                 });
                             } else {
-                                // အော်ဒီယိုဖိုင်ဖြစ်ပါက ပေါ့ပါးမြန်ဆန်သော Memory Object URL ထုတ်ပေးမည်
                                 const objectUrl = URL.createObjectURL(file);
                                 document.getElementById(`lbl-${slotId}`).innerText = file.name;
                                 updateStateAndSync(field.id, objectUrl);
@@ -510,7 +520,7 @@
                     if (qrModal && generatedLinkInput) {
                         generatedLinkInput.value = targetedLiveUrl;
                         if (qrcodeCanvas) {
-                            qrcodeCanvas.innerHTML = "<div class='text-red-400 text-xs p-4 border border-dashed border-red-500 rounded-xl bg-red-950/30'>⚠️ စာသားပမာဏ များပြားလွန်းသဖြင့် QR Code ရုပ်ပုံ မထုတ်ပေးနိုင်သော်လည်း သင့်ဝဘ်ဆိုက်လင့်ခ်ကို အောက်တွင် အောင်မြင်စွာ တည်ဆောက်ပြီးပါပြီ။ လင့်ခ်ကို ကူးယူအသုံးပြုနိုင်ပါသည်။</div>";
+                            qrcodeCanvas.innerHTML = "<div class='text-red-400 text-xs p-4 border border-dashed border-red-500 rounded-xl bg-red-950/30'>⚠️ ဝဘ်ဆိုက်လင့်ခ်ကို အောက်တွင် အောင်မြင်စွာ တည်ဆောက်ပြီးပါပြီ။ လင့်ခ်ကို ကူးယူအသုံးပြုနိုင်ပါသည်။</div>";
                         }
                         qrModal.classList.remove("hidden");
                         return;
