@@ -49,7 +49,6 @@
             z-index: 50;
         }
 
-        /* Custom Scrollbar hide for clean Mobile Tab Scroller */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -132,17 +131,11 @@
             <button id="mobile-btn-blog" onclick="switchTemplateFile('blog.html', 'btn-blog')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
                 <i class="fa-solid fa-gift text-amber-500 text-xs"></i> <span>Surprise</span>
             </button>
-            <button id="mobile-btn-birthday" onclick="switchTemplateFile('birthday.html', 'btn-birthday')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
-                <i class="fa-solid fa-cake-candles text-indigo-500 text-xs"></i> <span>Birthday</span>
-            </button>
             <button id="mobile-btn-christmas" onclick="switchTemplateFile('christmas.html', 'btn-christmas')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
                 <i class="fa-solid fa-tree text-emerald-500 text-xs"></i> <span>Christmas</span>
             </button>
             <button id="mobile-btn-anniversary" onclick="switchTemplateFile('anniversary.html', 'btn-anniversary')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
                 <i class="fa-solid fa-ring text-purple-500 text-xs"></i> <span>Anniversary</span>
-            </button>
-            <button id="mobile-btn-friendship" onclick="switchTemplateFile('friendship.html', 'btn-friendship')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
-                <i class="fa-solid fa-user-group text-cyan-500 text-xs"></i> <span>Friendship</span>
             </button>
         </div>
     </header>
@@ -179,7 +172,6 @@
                     <div class="bg-slate-100 dark:bg-slate-800 text-purple-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-ring text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Happy Anniversary</h3><p class="text-[11px] text-slate-400">anniversary.html</p></div>
                 </div>
-
             </div>
         </aside>
 
@@ -287,14 +279,12 @@
             activeSelectedFile = fileName;
             document.getElementById('previewIframe').src = fileName;
             
-            // Sync Desktop Left Panel Selection Styling
             const allCards = document.querySelectorAll('.template-card');
             allCards.forEach(card => {
                 card.className = "template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm";
             });
             document.getElementById(cardId).className = "template-card p-4 rounded-xl border border-indigo-500 bg-indigo-600/10 dark:bg-indigo-600/5 cursor-pointer flex items-center space-x-3 group transition-all duration-300 shadow-md scale-[1.02]";
 
-            // Sync Mobile Top Layout Bar Active Selection Styling
             const mobileTabs = document.querySelectorAll('.mobile-tab-btn');
             mobileTabs.forEach(btn => {
                 btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-500/30', 'shadow-sm');
@@ -307,7 +297,6 @@
                 targetedMobileBtn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-500/30', 'shadow-sm');
             }
 
-            // Fire setup UI visibility animations on initial selection
             if (!setupCompleted) {
                 setupCompleted = true;
                 const overlay = document.getElementById('viewportBlanketOverlay');
@@ -329,11 +318,42 @@
             }
         });
 
+        // ⚡ IMAGE COMPRESSION FUNCTION (ဓာတ်ပုံအရွယ်အစားချုံ့ပေးသည့် အပိုင်း)
+        function compressAndProcessImage(file, callback) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function (event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // အများဆုံး Resolution ကို Width 800px အထိပဲ ထားရှိပြီး ချုံ့မည်
+                    const MAX_WIDTH = 800;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > MAX_WIDTH) {
+                        height = Math.round((height * MAX_WIDTH) / width);
+                        width = MAX_WIDTH;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Image Quality ကို 70% ဖြင့် Base64 အဖြစ် ပြောင်းလဲထုတ်ယူခြင်း (ပေါ့ပါးမြန်ဆန်သွားစေရန်)
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    callback(compressedBase64);
+                };
+            };
+        }
+
         function buildDynamicStudioForm(schema) {
             const container = document.getElementById('dynamicFormContainer');
             container.innerHTML = '';
             
-            // Keep previous states if layout reloads, otherwise set defaults
             const originalStorage = { ...stateDataStorage };
             stateDataStorage = {};
 
@@ -411,11 +431,20 @@
                     fileWrapper.querySelector('input').addEventListener('change', function() {
                         const file = this.files[0];
                         if (file) {
-                            document.getElementById(`lbl-${slotId}`).innerText = file.name;
+                            document.getElementById(`lbl-${slotId}`).innerText = "Processing/Compressing...";
                             
-                            // 🛠️ FIX: FileReader Base64 အစား စွမ်းဆောင်ရည်အလွန်မြင့်မားသော Object URL ကို ပြောင်းလဲအသုံးပြုခြင်း
-                            const objectUrl = URL.createObjectURL(file);
-                            updateStateAndSync(field.id, objectUrl);
+                            if (field.type === 'image') {
+                                // ဓာတ်ပုံဖြစ်လျှင် အရည်အသွေးမကျဘဲ စက္ကန့်ပိုင်းအတွင်း ချက်ချင်းချုံ့မည်
+                                compressAndProcessImage(file, function(compressedUrl) {
+                                    document.getElementById(`lbl-${slotId}`).innerText = file.name + " (Compressed)";
+                                    updateStateAndSync(field.id, compressedUrl);
+                                });
+                            } else {
+                                // အော်ဒီယိုဖိုင်ဖြစ်ပါက ပေါ့ပါးမြန်ဆန်သော Memory Object URL ထုတ်ပေးမည်
+                                const objectUrl = URL.createObjectURL(file);
+                                document.getElementById(`lbl-${slotId}`).innerText = file.name;
+                                updateStateAndSync(field.id, objectUrl);
+                            }
                         }
                     });
                     fieldWrapper.appendChild(fileWrapper);
@@ -451,11 +480,10 @@
                 let targetFile = (typeof activeSelectedFile !== 'undefined' && activeSelectedFile) ? activeSelectedFile : 'lovecard.html';
                 targetedLiveUrl = `${currentOrigin}/${targetFile}`;
                 
-                // Payload ထဲမှ Blob URL များသည် Local သာဖြစ်၍ QR Code ထုတ်ရာတွင် Error မတက်စေရန် စစ်ထုတ်ပေးခြင်း
                 const cleanState = { ...stateDataStorage };
                 for (let key in cleanState) {
                     if (typeof cleanState[key] === 'string' && cleanState[key].startsWith('blob:')) {
-                        delete cleanState[key]; // Cloud Deploy သည့်အခါ ပုံများကို CDN ပေါ်တင်ပြီး URL ပြောင်းပေးရန်လိုအပ်ပါသည်
+                        delete cleanState[key]; 
                     }
                 }
 
