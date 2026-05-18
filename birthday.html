@@ -1,134 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Surprise</title>
-    <style>
-        :root {
-            --cake-color: #f43f5e;
-            --cream-color: #fff3f5;
-            --bg: #090514;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: radial-gradient(circle at center, #1e1135 0%, var(--bg) 100%);
-            height: 100vh; display: flex; justify-content: center; align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; color: white;
-        }
-        #overlay {
-            position: fixed; inset: 0; background: #000; z-index: 100;
-            display: flex; justify-content: center; align-items: center;
-            text-transform: uppercase; letter-spacing: 3px; color: #fb7185;
-            text-align: center; padding: 20px; cursor: pointer; transition: 1s;
-        }
-        .container { text-align: center; width: 100%; max-width: 360px; padding: 20px; transition: opacity 1s; }
-        .title { font-size: 2rem; font-weight: 800; background: linear-gradient(to right, #f43f5e, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        .subtitle { font-size: 1rem; color: #94a3b8; margin-bottom: 30px; }
-        
-        .cake-wrapper { width: 150px; height: 150px; margin: 0 auto 40px; position: relative; cursor: pointer; }
-        .cake { position: absolute; bottom: 0; width: 100%; height: 60px; background: var(--cake-color); border-radius: 10px 10px 4px 4px; box-shadow: 0 8px 0 #e11d48; }
-        .cream { position: absolute; top: -15px; width: 100%; height: 25px; background: var(--cream-color); border-radius: 20px; }
-        .candle { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); width: 10px; height: 35px; background: #38bdf8; border-radius: 3px; }
-        .flame { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); width: 14px; height: 18px; background: #fb923c; border-radius: 50% 50% 20% 20%; animation: flicker 0.1s infinite alternate; }
-        .flame.blown { display: none; }
-        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.1) rotate(3deg); } }
-
-        .letter-card { display: none; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 25px; font-size: 0.95rem; line-height: 1.7; color: #e2e8f0; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .balloon { position: absolute; bottom: -10vh; font-size: 2rem; animation: floatUp 7s linear forwards; pointer-events: none; }
-        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 <body>
 
-    <div id="overlay" onclick="initEngine()">🎂 မွေးနေ့ Surprise ရှိလို့ နှိပ်ကြည့်ပါဦး 🎁</div>
-
-    <div class="container" id="stage">
-        <h1 class="title" id="nameDisplay">Happy Birthday</h1>
-        <p class="subtitle" id="subDisplay">Wishing you the best day ever!</p>
-        
-        <div class="cake-wrapper" onclick="blowCandle()">
-            <div class="candle"><div class="flame" id="flame"></div></div>
-            <div class="cake"><div class="cream"></div></div>
-        </div>
-
-        <div class="letter-card" id="letter"></div>
-    </div>
-
-    <audio id="bgMusic" loop preload="auto"></audio>
-
-    <script>
-        const templateManifest = {
-            type: 'REGISTER_MANIFEST',
-            schema: [
-                { id: 'overlayText', type: 'text', label: 'စဖွင့်ချင်းစာသား', icon: 'fa-solid fa-comment', defaultValue: '🎂 မွေးနေ့ Surprise ရှိလို့ နှိပ်ကြည့်ပါဦး 🎁' },
-                { id: 'birthdayName', type: 'text', label: 'မွေးနေ့ရှင် အမည်', icon: 'fa-solid fa-user', defaultValue: 'Happy Birthday' },
-                { id: 'subText', type: 'text', label: 'ဆုတောင်းခေါင်းစဉ်တို', icon: 'fa-solid fa-star', defaultValue: 'Wishing you the best day ever!' },
-                { id: 'wishLetter', type: 'textarea', label: 'မွေးနေ့ဆုတောင်းမေတ္တာစာ', icon: 'fa-solid fa-cake-candles', rows: 4, defaultValue: 'မွေးနေ့မှစ၍ နောင်နှစ်ပေါင်းများစွာတိုင် ပျော်ရွှင်ချမ်းမြေ့ပါစေ။ လိုအင်ဆန္ဒဟူသမျှ ပြည့်ဝပြီး စိတ်ချမ်းသာကိုယ်ကျန်းမာရှိပါစေကြောင်း ဆုတောင်းပေးလိုက်ပါတယ်ခင်ဗျာ။ ✨' },
-                { id: 'bgAudioData', type: 'audio', label: 'မွေးနေ့သီချင်းထည့်ရန်', icon: 'fa-solid fa-music' }
-            ]
-        };
-        window.parent.postMessage(templateManifest, '*');
-
-        let letterText = "";
-        
-        function initEngine() {
-            document.getElementById('overlay').style.opacity = '0';
-            setTimeout(() => document.getElementById('overlay').style.display = 'none', 1000);
-            
-            const music = document.getElementById('bgMusic');
-            if (music && music.src) {
-                music.play().catch(err => console.log("Audio play deferred:", err));
-            }
-            setInterval(spawnBalloon, 600);
-        }
-
-        function blowCandle() {
-            document.getElementById('flame').classList.add('blown');
-            setTimeout(() => {
-                document.getElementById('letter').style.display = 'block';
-                document.getElementById('letter').innerText = letterText;
-            }, 600);
-        }
-
-        function spawnBalloon() {
-            const b = document.createElement('div');
-            b.className = 'balloon';
-            const emojis = ['🎈', '✨', '🎉', '🎂'];
-            b.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-            b.style.left = Math.random() * 100 + "vw";
-            document.body.appendChild(b);
-            setTimeout(() => b.remove(), 7000);
-        }
-
-        // Live Data Binding (Both Studio & Exported Site)
-        window.addEventListener('message', function(event) {
-            if (event.data && event.data.type === 'UPDATE_DATA') {
-                const d = event.data.payload;
-                if(d.overlayText) document.getElementById('overlay').innerText = d.overlayText;
-                if(d.birthdayName) document.getElementById('nameDisplay').innerText = d.birthdayName;
-                if(d.subText) document.getElementById('subDisplay').innerText = d.subText;
-                if(d.bgAudioData) {
-                    document.getElementById('bgMusic').src = d.bgAudioData;
-                }
-                if(d.wishLetter) {
-                    letterText = d.wishLetter;
-                    if(document.getElementById('letter').style.display === 'block') {
-                        document.getElementById('letter').innerText = d.wishLetter;
-                    }
-                }
-            }
-        });
-
-        // Live Snapshot Pipeline
-        window.addEventListener('message', function(event) {
-            if (event.data && event.data.type === 'REQUEST_SNAPSHOT') {
-                window.parent.postMessage({
-                    type: 'HTML_SNAPSHOT',
-                    html: document.documentElement.outerHTML
-                }, '*');
-            }
-        });
-    </script>
+  <div>Sorry come back later</div>
+  
 </body>
 </html>

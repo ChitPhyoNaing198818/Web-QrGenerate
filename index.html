@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Studio Pro (Dynamic Engine)</title>
+    <title>Template Studio (Dynamic Engine)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -49,6 +49,10 @@
             z-index: 50;
         }
 
+        /* Custom Scrollbar hide for clean Mobile Tab Scroller */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
         @media (max-width: 1023px) {
             .preview-mobile {
                 width: 100% !important;
@@ -63,7 +67,7 @@
             .mobile-flex-stack {
                 display: flex !important;
                 flex-direction: column !important;
-                gap: 1.5rem !important;
+                gap: 1.25rem !important;
             }
         }
 
@@ -90,14 +94,12 @@
             <div class="bg-gradient-to-r from-indigo-500 to-blue-600 w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
                 <i class="fa-solid fa-cubes text-sm"></i>
             </div>
-            <span class="text-base font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Template Studio Pro</span>
-            <span class="bg-indigo-500/10 text-indigo-500 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-500/20">v2.1</span>
+            <span class="text-base font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Web&Qr Generator</span>
+            <span class="bg-indigo-500/10 text-indigo-500 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-500/20">v1.0</span>
         </div>
         
         <div class="flex items-center space-x-6 text-sm font-semibold text-slate-500 dark:text-slate-400">
             <span class="text-indigo-500 dark:text-indigo-400 cursor-default flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i> Workspace</span>
-            <a href="#" class="hover:text-slate-900 dark:hover:text-white transition"></a>
-            <a href="#" class="hover:text-slate-900 dark:hover:text-white transition"></a>
         </div>
 
         <div class="flex items-center space-x-3">
@@ -107,11 +109,42 @@
         </div>
     </nav>
 
-    <header class="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <span class="text-sm font-bold bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">Template Studio Pro</span>
-        <button id="menuToggleButton" onclick="toggleMobileSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-950 active:scale-95 transition-transform">
-            <i id="menuToggleIcon" class="fa-solid fa-bars text-lg"></i>
-        </button>
+    <header class="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3.5 flex flex-col gap-3 sticky top-0 z-40 shadow-sm">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="bg-gradient-to-r from-indigo-500 to-blue-600 w-7 h-7 rounded-lg flex items-center justify-center text-white">
+                    <i class="fa-solid fa-cubes text-xs"></i>
+                </div>
+                <span class="text-sm font-bold bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">Web&Qr Generator V1.0</span>
+            </div>
+            <div class="flex items-center space-x-1 text-[10px] text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md font-medium">
+                <span class="w-1 h-1 bg-emerald-500 rounded-full animate-pulse"></span> Ready
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-1 -mx-4 px-4 border-t border-slate-100 dark:border-slate-800/60 pt-2.5">
+            <button id="mobile-btn-index" onclick="switchTemplateFile('lovecard.html', 'btn-index')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
+                <i class="fa-solid fa-envelope text-pink-500 text-xs"></i> <span>Love Card</span>
+            </button>
+            <button id="mobile-btn-cv" onclick="switchTemplateFile('cv.html', 'btn-cv')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
+                <i class="fa-solid fa-heart text-rose-500 text-xs"></i> <span>Will You Mine</span>
+            </button>
+            <button id="mobile-btn-blog" onclick="switchTemplateFile('blog.html', 'btn-blog')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
+                <i class="fa-solid fa-gift text-amber-500 text-xs"></i> <span>Surprise</span>
+            </button>
+            <button id="mobile-btn-birthday" onclick="switchTemplateFile('birthday.html', 'btn-birthday')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
+                <i class="fa-solid fa-cake-candles text-indigo-500 text-xs"></i> <span>Birthday</span>
+            </button>
+            <button id="mobile-btn-christmas" onclick="switchTemplateFile('christmas.html', 'btn-christmas')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
+                <i class="fa-solid fa-tree text-emerald-500 text-xs"></i> <span>Christmas</span>
+            </button>
+            <button id="mobile-btn-anniversary" onclick="switchTemplateFile('anniversary.html', 'btn-anniversary')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
+                <i class="fa-solid fa-ring text-purple-500 text-xs"></i> <span>Anniversary</span>
+            </button>
+            <button id="mobile-btn-friendship" onclick="switchTemplateFile('friendship.html', 'btn-friendship')" class="mobile-tab-btn flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold border border-transparent whitespace-nowrap transition-all">
+                <i class="fa-solid fa-user-group text-cyan-500 text-xs"></i> <span>Friendship</span>
+            </button>
+        </div>
     </header>
 
     <div class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-2 mobile-flex-stack">
@@ -137,11 +170,6 @@
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Personal Surprise Blog</h3><p class="text-[11px] text-slate-400">blog.html</p></div>
                 </div>
 
-                <div id="btn-birthday" onclick="switchTemplateFile('birthday.html', 'btn-birthday')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
-                    <div class="bg-slate-100 dark:bg-slate-800 text-indigo-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-cake-candles text-lg"></i></div>
-                    <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Happy Birthday</h3><p class="text-[11px] text-slate-400">birthday.html</p></div>
-                </div>
-
                 <div id="btn-christmas" onclick="switchTemplateFile('christmas.html', 'btn-christmas')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
                     <div class="bg-slate-100 dark:bg-slate-800 text-emerald-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-tree text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Merry Christmas</h3><p class="text-[11px] text-slate-400">christmas.html</p></div>
@@ -152,11 +180,7 @@
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Happy Anniversary</h3><p class="text-[11px] text-slate-400">anniversary.html</p></div>
                 </div>
 
-                <div id="btn-friendship" onclick="switchTemplateFile('friendship.html', 'btn-friendship')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
-                    <div class="bg-slate-100 dark:bg-slate-800 text-cyan-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-user-group text-lg"></i></div>
-                    <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Friendship Memoir</h3><p class="text-[11px] text-slate-400">friendship.html</p></div>
                 </div>
-            </div>
         </aside>
 
         <main id="previewViewportContainer" class="col-span-1 lg:col-span-9 flex flex-col items-center w-full">
@@ -166,7 +190,7 @@
                     <div class="w-14 h-14 bg-slate-900/80 border border-slate-700 rounded-2xl flex items-center justify-center text-slate-400 mb-3 animate-bounce">
                         <i class="fa-solid fa-mobile-button text-xl"></i>
                     </div>
-                    <h3 class="text-sm font-bold text-white mb-1">Select Design to Edit</h3>
+                    <h3 class="text-sm font-bold text-white mb-1">Select Templates to Edit</h3>
                 </div>
 
                 <div class="flex-1 bg-slate-900/60 p-4 flex items-center justify-center overflow-hidden">
@@ -260,36 +284,31 @@
         let lastKnownSnapshotHTML = "";
         let qrCodeInstance = null;
 
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('layoutSidebar');
-            const toggleIcon = document.getElementById('menuToggleIcon');
-            
-            if (sidebar.classList.contains('hidden')) {
-                sidebar.classList.remove('hidden');
-                toggleIcon.classList.replace('fa-bars', 'fa-xmark');
-            } else {
-                sidebar.classList.add('hidden');
-                toggleIcon.classList.replace('fa-xmark', 'fa-bars');
-            }
-        }
-
         function switchTemplateFile(fileName, cardId) {
             activeSelectedFile = fileName;
             document.getElementById('previewIframe').src = fileName;
             
+            // Sync Desktop Left Panel Selection Styling
             const allCards = document.querySelectorAll('.template-card');
             allCards.forEach(card => {
                 card.className = "template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm";
             });
             document.getElementById(cardId).className = "template-card p-4 rounded-xl border border-indigo-500 bg-indigo-600/10 dark:bg-indigo-600/5 cursor-pointer flex items-center space-x-3 group transition-all duration-300 shadow-md scale-[1.02]";
 
-            if (window.innerWidth < 1024) {
-                const sidebar = document.getElementById('layoutSidebar');
-                if (!sidebar.classList.contains('hidden')) {
-                    toggleMobileSidebar();
-                }
+            // Sync Mobile Top Layout Bar Active Selection Styling
+            const mobileTabs = document.querySelectorAll('.mobile-tab-btn');
+            mobileTabs.forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-500/30', 'shadow-sm');
+                btn.classList.add('bg-slate-100', 'dark:bg-slate-800/80', 'text-slate-700', 'dark:text-slate-300', 'border-transparent');
+            });
+            
+            const targetedMobileBtn = document.getElementById(`mobile-${cardId}`);
+            if(targetedMobileBtn) {
+                targetedMobileBtn.classList.remove('bg-slate-100', 'dark:bg-slate-800/80', 'text-slate-700', 'dark:text-slate-300', 'border-transparent');
+                targetedMobileBtn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-500/30', 'shadow-sm');
             }
 
+            // Fire setup UI visibility animations on initial selection
             if (!setupCompleted) {
                 setupCompleted = true;
                 const overlay = document.getElementById('viewportBlanketOverlay');
@@ -322,21 +341,65 @@
             schema.forEach(field => {
                 stateDataStorage[field.id] = field.defaultValue || '';
                 const fieldWrapper = document.createElement('div');
-                fieldWrapper.className = "space-y-1.5";
-                fieldWrapper.innerHTML = `<label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider"><i class="${field.icon} text-indigo-500 mr-1.5"></i> ${field.label}</label>`;
+                fieldWrapper.className = "space-y-1.5 text-left";
+                fieldWrapper.innerHTML = `<label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider"><i class="${field.icon || 'fa-solid fa-gear'} text-indigo-500 mr-1.5"></i> ${field.label}</label>`;
 
                 if (field.type === 'text') {
                     const input = document.createElement('input');
-                    input.type = 'text'; input.value = field.defaultValue;
+                    input.type = 'text'; input.value = field.defaultValue || '';
                     input.className = "w-full px-4 py-2.5 bg-slate-50 focus:bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition";
                     input.addEventListener('input', (e) => updateStateAndSync(field.id, e.target.value));
                     fieldWrapper.appendChild(input);
                 } else if (field.type === 'textarea') {
                     const textarea = document.createElement('textarea');
-                    textarea.rows = 3; textarea.value = field.defaultValue;
+                    textarea.rows = 3; textarea.value = field.defaultValue || '';
                     textarea.className = "w-full px-4 py-2.5 bg-slate-50 focus:bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none";
                     textarea.addEventListener('input', (e) => updateStateAndSync(field.id, e.target.value));
                     fieldWrapper.appendChild(textarea);
+                } else if (field.type === 'color') {
+                    const colorInput = document.createElement('input');
+                    colorInput.type = 'color'; colorInput.value = field.defaultValue || '#ffffff';
+                    colorInput.className = "w-full h-11 p-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer outline-none focus:ring-2 focus:ring-indigo-500 transition";
+                    colorInput.addEventListener('input', (e) => updateStateAndSync(field.id, e.target.value));
+                    fieldWrapper.appendChild(colorInput);
+                } else if (field.type === 'select') {
+                    const select = document.createElement('select');
+                    select.className = "w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition";
+                    if (field.options && Array.isArray(field.options)) {
+                        field.options.forEach(opt => {
+                            const option = document.createElement('option');
+                            option.value = typeof opt === 'object' ? opt.value : opt;
+                            option.textContent = typeof opt === 'object' ? opt.label : opt;
+                            if (option.value === field.defaultValue) option.selected = true;
+                            select.appendChild(option);
+                        });
+                    }
+                    select.addEventListener('change', (e) => updateStateAndSync(field.id, e.target.value));
+                    fieldWrapper.appendChild(select);
+                } else if (field.type === 'range') {
+                    const sliderContainer = document.createElement('div');
+                    sliderContainer.className = "flex items-center space-x-3 w-full bg-slate-50 dark:bg-slate-950 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700";
+                    
+                    const range = document.createElement('input');
+                    range.type = 'range';
+                    range.min = field.min !== undefined ? field.min : 0;
+                    range.max = field.max !== undefined ? field.max : 100;
+                    range.step = field.step !== undefined ? field.step : 1;
+                    range.value = field.defaultValue !== undefined ? field.defaultValue : range.min;
+                    range.className = "flex-1 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-500";
+                    
+                    const monitor = document.createElement('span');
+                    monitor.className = "text-xs font-mono font-bold text-slate-500 dark:text-slate-400 min-w-[32px] text-right";
+                    monitor.textContent = range.value + (field.unit || '');
+                    
+                    range.addEventListener('input', (e) => {
+                        monitor.textContent = e.target.value + (field.unit || '');
+                        updateStateAndSync(field.id, e.target.value);
+                    });
+                    
+                    sliderContainer.appendChild(range);
+                    sliderContainer.appendChild(monitor);
+                    fieldWrapper.appendChild(sliderContainer);
                 } else if (field.type === 'image' || field.type === 'audio') {
                     const slotId = Math.random().toString(36).substring(7);
                     const fileWrapper = document.createElement('div');
@@ -392,7 +455,7 @@
 
                 showQRModalStudio(targetedLiveUrl);
             } catch (error) {
-                alert("❌ Link တည်ဆောက်မှု အဆင်မပြေဖြစ်သွားပါပြီ။ ထပ်မံကြိုးစားကြည့်ပေးပါဗျာ။");
+                alert(" Link တည်ဆောက်မှု အဆင်မပြေဖြစ်သွားပါပြီ။ ထပ်မံကြိုးစားကြည့်ပေးပါဗျာ။");
             } finally {
                 deployBtn.disabled = false; deployBtnText.innerText = "Website Link နှင့် QR ကုဒ် ရယူမည်";
             }

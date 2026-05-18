@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 10years Anniversary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Padauk:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Padauk', 'Fredoka', sans-serif;
+            background-color: #df607d;
+        }
+        /* Custom scrollbar to match aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff6f7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e19ba8;
+            border-radius: 10px;
+        }
+        /* Lock background grid pattern */
+        .lock-bg {
+            background-image: radial-gradient(#e57891 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        /* Smooth snapping scroll for the full-page experience */
+        .scroll-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        .scroll-section {
+            scroll-snap-align: start;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Immersive Photo Cinematic Zoom Effect */
+        .bg-zoom-img {
+            transition: transform 6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: scale(1);
+        }
+        .scroll-section.active .bg-zoom-img {
+            transform: scale(1.1);
+        }
+
+        /* Advanced Floating & Fade Letter Box Animation */
+        .reveal-card {
+            opacity: 0;
+            transform: translateY(60px) scale(0.95);
+            filter: blur(4px);
+            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .reveal-card.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        /* Sparkle & Floating Heart Particles */
+        @keyframes particleUp {
+            0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+            30% { opacity: 0.6; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: particleUp 7s linear infinite;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body class="overflow-hidden select-none m-0 p-0">
+
+    <div id="particle-container" class="fixed inset-0 pointer-events-none overflow-hidden hidden z-10"></div>
+
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <button onclick="toggleMusic()" id="music-btn" class="hidden fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-md border-2 border-[#e19ba8] text-[#b53d57] p-3 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform duration-200">
+        <svg id="music-icon-play" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+        </svg>
+        <svg id="music-icon-mute" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 hidden">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+        </svg>
+    </button>
+
+    <div id="lock-screen" class="fixed inset-0 z-50 flex items-center justify-center lock-bg p-4 transition-all duration-1000">
+        <div class="w-full max-w-sm bg-[#fdf2f4]/95 backdrop-blur-md rounded-[2rem] border-4 border-[#b53d57] shadow-2xl overflow-hidden transform transition-all duration-700">
+            <div class="bg-[#b53d57] p-6 text-center border-b-4 border-[#8f2a3f]">
+                <h1 class="text-2xl font-bold text-white tracking-wide">
+                    Happy 10years Anniversary
+                </h1>
+                <p class="text-pink-200 text-sm mt-2 font-light">ကိုယ်တို့ရဲ့ချစ်သူစဖြစ်တဲ့နေ့လေးကိုမှတ်မိသေးလား</p>
+            </div>
+
+            <div class="p-6 flex flex-col items-center relative">
+                <div class="w-full max-w-[280px] bg-white border-2 border-dashed border-[#b53d57] rounded-xl py-3 px-4 text-center text-xl font-semibold tracking-[0.4em] text-[#b53d57] shadow-inner mb-2 h-14 flex items-center justify-center">
+                    <span id="password-display" class="text-2xl"></span>
+                </div>
+                <p id="error-msg" class="text-[#b53d57] text-xs font-semibold h-4 opacity-0 transition-opacity duration-300">ဒါက တို့နှစ်ယောက်ရဲ့ အထူးခြားဆုံးနေ့ မဟုတ်သေးဘူးနော်! 🍓</p>
+
+                <div class="grid grid-cols-3 gap-3 my-4 w-full max-w-[280px]">
+                    <button onclick="pressKey('1')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">1</button>
+                    <button onclick="pressKey('2')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">2</button>
+                    <button onclick="pressKey('3')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">3</button>
+
+                    <button onclick="pressKey('4')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">4</button>
+                    <button onclick="pressKey('5')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">5</button>
+                    <button onclick="pressKey('6')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">6</button>
+
+                    <button onclick="pressKey('7')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">7</button>
+                    <button onclick="pressKey('8')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">8</button>
+                    <button onclick="pressKey('9')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">9</button>
+
+                    <button onclick="pressDelete()" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] text-[#b53d57] font-semibold rounded-2xl shadow-[0_4px_0_#d9a3af] flex items-center justify-center active:scale-95 text-sm">back</button>
+                    <button onclick="pressKey('0')" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] active:scale-95 rounded-full flex flex-col items-center justify-center shadow-[0_4px_0_#d9a3af] text-xl font-bold text-[#b53d57]">0</button>
+                    <button onclick="clearAll()" class="h-14 bg-[#f6cad3] border-2 border-[#d9a3af] text-[#b53d57] font-semibold rounded-2xl shadow-[0_4px_0_#d9a3af] flex items-center justify-center active:scale-95 text-sm">clear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-story" class="hidden scroll-container w-full h-screen">
+        
+        <section class="scroll-section flex flex-col items-center justify-center p-6 bg-[#fff6f7] text-center">
+            <div class="reveal-card active max-w-xl z-20 bg-white/85 backdrop-blur-md border-4 border-[#e19ba8] rounded-[2rem] p-8 shadow-2xl transition-all duration-700">
+                <p class="text-xs tracking-widest text-[#b53d57] uppercase font-bold mb-1">တို့နှစ်ယောက်ရဲ့ ဖြတ်သန်းခဲ့တဲ့ ခရီးစဉ်</p>
+                
+                <h1 id="counter-box" class="text-3xl md:text-4xl font-bold text-[#b53d57] tracking-tight my-6 min-h-[4rem] flex items-center justify-center transition-all duration-700">
+                    <span id="days-counter" class="font-sans font-bold text-5xl md:text-6xl">0</span>&nbsp;Days
+                </h1>
+                
+                <div class="grid grid-cols-3 gap-4 border-t-2 border-dashed border-[#f4ced5] pt-4 mt-4 text-[#b53d57]">
+                    <div>
+                        <p class="text-lg font-bold">၁၂၀</p>
+                        <p class="text-[10px] text-zinc-500 font-semibold">လများ</p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold">၄,၃٨၀</p>
+                        <p class="text-[10px] text-zinc-500 font-semibold">အပြုံးများ</p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold">∞</p>
+                        <p class="text-[10px] text-zinc-500 font-semibold">အနာဂတ်</p>
+                    </div>
+                </div>
+                <p class="text-[11px] text-[#b53d57] font-semibold tracking-wider animate-bounce mt-8">အောက်သို့ဆွဲပြီး တို့နှစ်ယောက်ရဲ့ ပုံရိပ်လေးတွေကို ကြည့်ပါ ▼</p>
+            </div>
+        </section>
+
+        <section class="scroll-section flex items-center justify-center p-6">
+            <div class="absolute inset-0 z-0 overflow-hidden">
+                <img src="YOUR_IMAGE_URL_HERE_1" class="bg-zoom-img w-full h-full object-cover brightness-[0.7]" alt="Day 1 Background">
+            </div>
+            
+            <div class="reveal-card relative z-20 w-full max-w-md bg-white/90 backdrop-blur-md rounded-3xl border-2 border-[#e19ba8] p-6 md:p-8 shadow-2xl mx-4">
+                <span class="inline-block bg-[#b53d57] text-white text-[10px] px-3 py-1 rounded-full font-semibold uppercase tracking-wider mb-3">အခန်း (၁) — ပထမဆုံးနေ့</span>
+                <h2 class="text-xl font-bold text-[#b53d57] mb-2">အရာအားလုံး စတင်ပြောင်းလဲခဲ့တဲ့အချိန်</h2>
+                <div class="w-10 h-[2px] bg-[#e19ba8] mb-4"></div>
+                <p class="text-sm text-zinc-700 leading-relaxed font-light">
+                    တို့နှစ်ယောက်ရဲ့ အစောဆုံးအတူတူရိုက်ခဲ့တဲ့ ဓာတ်ပုံလေးကို ပြန်ကြည့်တိုင်း မသိစိတ်ကနေ ပြုံးမိနေတုန်းပဲ။ အဲ့တုန်းက တို့နှစ်ယောက်စလုံးက အရမ်းငယ်ပြီး ရှက်တတ်ကြတုန်း၊ အခုလိုမျိုး လှပပြီး အဓိပ္ပာယ်ရှိတဲ့ ဆယ်စုနှစ်ခရီးစဉ်ကြီးတစ်ခုကို စတင်လျှောက်လှမ်းနေမိမှန်းတောင် သတိမထားမိခဲ့ကြဘူးနော်။ အဲ့ဒီနေ့ဟာ ကိုယ့်ကမ္ဘာကြီးရဲ့ လိုအပ်နေတဲ့အပိုင်းအစလေးကို ရှာဖွေတွေ့ရှိခဲ့တဲ့နေ့လေးပါပဲ။
+                </p>
+            </div>
+        </section>
+
+        <section class="scroll-section flex items-center justify-center p-6">
+            <div class="absolute inset-0 z-0 overflow-hidden">
+                <img src="YOUR_IMAGE_URL_HERE_2" class="bg-zoom-img w-full h-full object-cover brightness-[0.7]" alt="Year 5 Background">
+            </div>
+            
+            <div class="reveal-card relative z-20 w-full max-w-md bg-white/90 backdrop-blur-md rounded-3xl border-2 border-[#e19ba8] p-6 md:p-8 shadow-2xl mx-4">
+                <span class="inline-block bg-[#b53d57] text-white text-[10px] px-3 py-1 rounded-full font-semibold uppercase tracking-wider mb-3">အခန်း (၂) — (၅) နှစ်ပြည့်</span>
+                <h2 class="text-xl font-bold text-[#b53d57] mb-2">လက်တွဲမြဲမြံစွာနဲ့ အတူတူရင့်ကျက်လာခြင်း</h2>
+                <div class="w-10 h-[2px] bg-[#e19ba8] mb-4"></div>
+                <p class="text-sm text-zinc-700 leading-relaxed font-light">
+                    ၅ နှစ်တာကာလအတွင်းမှာ တို့နှစ်ယောက်က ချစ်သူသက်သက်တင်မဟုတ်တော့ဘဲ အပြန်အလှန် အားကိုးရတဲ့ မိသားစုလို ဖြစ်လာခဲ့ကြတယ်။ အတူတူသွားခဲ့တဲ့ ခရီးစဉ်တွေ၊ အမြဲတမ်းတူတူရယ်မောခဲ့ရတဲ့ ပြက်လုံးလေးတွေနဲ့ ဖြတ်သန်းလာရင်း မင်းဟာ ကိုယ့်ဘဝအတွက် အလိုအပ်ဆုံး ရင်ခွင်တစ်ခုဆိုတာ ပိုသေချာလာခဲ့ရတယ်။ မင်းကိုချစ်ရတာဟာ ကိုယ့်အတွက်တော့ အသက်ရှူရသလိုမျိုး သဘာဝကျပြီး သက်တောင့်သက်သာရှိလွန်းပါတယ်။
+                </p>
+            </div>
+        </section>
+
+        <section class="scroll-section flex items-center justify-center p-6">
+            <div class="absolute inset-0 z-0 overflow-hidden">
+                <img src="YOUR_IMAGE_URL_HERE_3" class="bg-zoom-img w-full h-full object-cover brightness-[0.7]" alt="Year 10 Background">
+            </div>
+            
+            <div class="reveal-card relative z-20 w-full max-w-md bg-white/90 backdrop-blur-md rounded-3xl border-2 border-[#e19ba8] p-6 md:p-8 shadow-2xl mx-4">
+                <span class="inline-block bg-[#b53d57] text-white text-[10px] px-3 py-1 rounded-full font-semibold uppercase tracking-wider mb-3">အခန်း (၃) — (၁၀) နှစ်ပြည့်</span>
+                <h2 class="text-xl font-bold text-[#b53d57] mb-2">တစ်သက်တာလုံးအတွက် ဆယ်စုနှစ်တစ်ခု</h2>
+                <div class="w-10 h-[2px] bg-[#e19ba8] mb-4"></div>
+                <p class="text-sm text-zinc-700 leading-relaxed font-light">
+                    ပြည့်ပြည့်စုံစုံ ဆယ်နှစ်တာကာလ၊ ၃,၆၅၂ ရက်တွေအထိ ရောက်လာခဲ့ပေမယ့် အခုထိ မင်းမျက်နှာလေးကို မြင်ရတိုင်း ရင်ခုန်သံတွေက အစကနဦးလို စည်းချက်မမှန်ဖြစ်နေတုန်းပဲ။ ဘဝမှာ မရေမတွက်နိုင်တဲ့ အကြိမ်အရေအတွက်အတိုင်း ကိုယ့်ကို ထပ်ခါတလဲလဲ ရွေးချယ်ပေးခဲ့လို့ ကျေးဇူးအများကြီးတင်ပါတယ် ချစ်သူ။ မင်းဟာ ကိုယ့်ရဲ့ နွေးထွေးတဲ့ အိမ်ကလေးဖြစ်သလို အချစ်ဆုံးသူငယ်ချင်းလည်း ဖြစ်ပါတယ်။ (၁၀)နှစ်ပြည့် အမှတ်တရ နှစ်ပတ်လည်နေ့လေးမှာ အရမ်းချစ်ပါတယ်! 🌹
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        let CORRECT_PASSWORD = "18052016"; // Dynamic global changeable reference password variable
+        let currentInput = "";
+        const bgMusic = document.getElementById('bg-music');
+
+        function pressKey(num) {
+            if (currentInput.length < 8) {
+                currentInput += num;
+                updateDisplay();
+                document.getElementById('error-msg').classList.add('opacity-0');
+            }
+            if (currentInput.length === 8) {
+                setTimeout(checkPassword, 300);
+            }
+        }
+
+        function pressDelete() {
+            if (currentInput.length > 0) {
+                currentInput = currentInput.slice(0, -1);
+                updateDisplay();
+            }
+        }
+
+        function clearAll() {
+            currentInput = "";
+            updateDisplay();
+            document.getElementById('error-msg').classList.add('opacity-0');
+        }
+
+        function updateDisplay() {
+            const display = document.getElementById('password-display');
+            display.innerText = currentInput.replace(/(.{2})(.{2})(.{4})/, "$1-$2-$3") || "";
+        }
+
+        function checkPassword() {
+            const lockScreen = document.getElementById('lock-screen');
+            const mainStory = document.getElementById('main-story');
+            const errorMsg = document.getElementById('error-msg');
+
+            if (currentInput === CORRECT_PASSWORD) {
+                lockScreen.classList.add('opacity-0', 'scale-95');
+                
+                playMusic();
+                document.getElementById('music-btn').classList.remove('hidden');
+
+                setTimeout(() => {
+                    lockScreen.style.display = 'none';
+                    mainStory.classList.remove('hidden');
+                    
+                    document.getElementById('particle-container').classList.remove('hidden');
+                    initHeartEngine();
+
+                    animateCounter(0, 3652, 2500); 
+                    startScrollObserver();
+                }, 700);
+            } else {
+                errorMsg.classList.remove('opacity-0');
+                lockScreen.classList.add('translate-x-2');
+                setTimeout(() => lockScreen.classList.remove('translate-x-2'), 100);
+                clearAll();
+            }
+        }
+
+        function animateCounter(start, end, duration) {
+            const displayElement = document.getElementById("days-counter");
+            const containerBox = document.getElementById("counter-box");
+            let startTimestamp = null;
+            
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                
+                const easeProgress = 1 - Math.pow(1 - progress, 4); 
+                const currentCount = Math.floor(easeProgress * (end - start) + start);
+                
+                displayElement.innerText = currentCount.toLocaleString();
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    setTimeout(() => {
+                        containerBox.style.opacity = "0";
+                        containerBox.style.transform = "scale(0.9) translateY(-10px)";
+                        
+                        setTimeout(() => {
+                            containerBox.innerHTML = "မင်္ဂလာရှိသော(၁၀)နှစ်ပြည့်နှစ်ပတ်လည်နေ့လေးဖြစ်ပါစေ။ 💕";
+                            containerBox.classList.add("text-rose-500", "text-2xl", "md:text-3xl", "font-bold", "scale-105");
+                            containerBox.style.opacity = "1";
+                            containerBox.style.transform = "scale(1) translateY(0)";
+                        }, 400);
+                    }, 300);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function startScrollObserver() {
+            const sections = document.querySelectorAll('.scroll-section');
+            
+            const observerOptions = {
+                root: document.getElementById('main-story'),
+                threshold: 0.35
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const card = entry.target.querySelector('.reveal-card');
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        if(card) card.classList.add('active');
+                    } else {
+                        entry.target.classList.remove('active');
+                        if(card) card.classList.remove('active');
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        function initHeartEngine() {
+            const container = document.getElementById('particle-container');
+            const icons = ['❤️', '💖', '🍓', '💕', '✨'];
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.classList.add('heart-particle');
+                particle.innerText = icons[Math.floor(Math.random() * icons.length)];
+                
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.fontSize = Math.random() * 14 + 12 + 'px';
+                particle.style.animationDuration = Math.random() * 3 + 5 + 's';
+                
+                container.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 8000);
+            }, 700);
+        }
+
+        function playMusic() {
+            bgMusic.play().catch(err => {
+                console.log("Audio autoplay restriction handled.");
+            });
+        }
+
+        function toggleMusic() {
+            const playIcon = document.getElementById('music-icon-play');
+            const muteIcon = document.getElementById('music-icon-mute');
+            
+            if (bgMusic.paused) {
+                bgMusic.play();
+                playIcon.classList.remove('hidden');
+                muteIcon.classList.add('hidden');
+            } else {
+                bgMusic.pause();
+                playIcon.classList.add('hidden');
+                muteIcon.classList.remove('hidden');
+            }
+        }
+    </script>
+
+    <script>
+        const STUDIO_MANIFEST_SCHEMA = [
+            { id: "bg_color", label: "Background Color", type: "color", defaultValue: "#df607d", icon: "fa-solid fa-palette" },
+            { id: "accent_color", label: "Theme Accent (Buttons/Borders)", type: "color", defaultValue: "#b53d57", icon: "fa-solid fa-brush" },
+            { id: "card_bg", label: "Card Backdrop Color", type: "color", defaultValue: "#ffffff", icon: "fa-solid fa-fill-drip" },
+            { id: "base_font_size", label: "Content Font Size", type: "range", min: 12, max: 20, step: 1, defaultValue: 14, unit: "px", icon: "fa-solid fa-text-height" },
+            { id: "lock_password", label: "Lockscreen Password (8 Digits)", type: "text", defaultValue: "18052016", icon: "fa-solid fa-key" },
+            { id: "lock_title", label: "Lockscreen Heading", type: "text", defaultValue: "Happy 10years Anniversary", icon: "fa-solid fa-heading" },
+            { id: "lock_hint", label: "Lockscreen Hint Message", type: "text", defaultValue: "ကိုယ်တို့ရဲ့ချစ်သူစဖြစ်တဲ့နေ့လေးကိုမှတ်မိသေးလား", icon: "fa-solid fa-comment-dots" },
+            { id: "story_1_title", label: "Chapter 1 Title", type: "text", defaultValue: "အရာအားလုံး စတင်ပြောင်းလဲခဲ့တဲ့အချိန်", icon: "fa-solid fa-book-open" },
+            { id: "story_1_desc", label: "Chapter 1 Description", type: "textarea", defaultValue: "တို့နှစ်ယောက်ရဲ့ အစောဆုံးအတူတူရိုက်ခဲ့တဲ့ ဓာတ်ပုံလေးကို ပြန်ကြည့်တိုင်း မသိစိတ်ကနေ ပြုံးမိနေတုန်းပဲ။ အဲ့တုန်းက တို့နှစ်ယောက်စလုံးက အရမ်းငယ်ပြီး ရှက်တတ်ကြတုန်း၊ အခုလိုမျိုး လှပပြီး အဓိပ္ပာယ်ရှိတဲ့ ဆယ်စုနှစ်ခရီးစဉ်ကြီးတစ်ခုကို စတင်လျှောက်လှမ်းနေမိမှန်းတောင် သတိမထားမိခဲ့ကြဘူးနော်။ အဲ့ဒီနေ့ဟာ ကိုယ့်ကမ္ဘာကြီးရဲ့ လိုအပ်နေတဲ့အပိုင်းအစလေးကို ရှာဖွေတွေ့ရှိခဲ့တဲ့နေ့လေးပါပဲ။", icon: "fa-solid fa-pen-nib" },
+            { id: "story_1_img", label: "Chapter 1 Background Image", type: "image", icon: "fa-solid fa-image" },
+            { id: "story_2_title", label: "Chapter 2 Title", type: "text", defaultValue: "လက်တွဲမြဲမြံစွာနဲ့ အတူတူရင့်ကျက်လာခြင်း", icon: "fa-solid fa-book-open" },
+            { id: "story_2_desc", label: "Chapter 2 Description", type: "textarea", defaultValue: "၅ နှစ်တာကာလအတွင်းမှာ တို့နှစ်ယောက်က ချစ်သူသက်သက်တင်မဟုတ်တော့ဘဲ အပြန်အလှန် အားကိုးရတဲ့ မိသားစုလို ဖြစ်လာခဲ့ကြတယ်။ အတူတူသွားခဲ့တဲ့ ခရီးစဉ်တွေ၊ အမြဲတမ်းတူတူရယ်မောခဲ့ရတဲ့ ပြက်လုံးလေးတွေနဲ့ ဖြတ်သန်းလာရင်း မင်းဟာ ကိုယ့်ဘဝအတွက် အလိုအပ်ဆုံး ရင်ခွင်တစ်ခုဆိုတာ ပိုသေချာလာခဲ့ရတယ်။ မင်းကိုချစ်ရတာဟာ ကိုယ့်အတွက်တော့ အသက်ရှူရသလိုမျိုး သဘာဝကျပြီး သက်တောင့်သက်သာရှိလွန်းပါတယ်။", icon: "fa-solid fa-pen-nib" },
+            { id: "story_2_img", label: "Chapter 2 Background Image", type: "image", icon: "fa-solid fa-image" },
+            { id: "story_3_title", label: "Chapter 3 Title", type: "text", defaultValue: "တစ်သက်တာလုံးအတွက် ဆယ်စုနှစ်တစ်ခု", icon: "fa-solid fa-book-open" },
+            { id: "story_3_desc", label: "Chapter 3 Description", type: "textarea", defaultValue: "ပြည့်ပြည့်စုံစုံ ဆယ်နှစ်တာကာလ၊ ၃,၆၅၂ ရက်တွေအထိ ရောက်လာခဲ့ပေမယ့် အခုထိ မင်းမျက်နှာလေးကို မြင်ရတိုင်း ရင်ခုန်သံတွေက အစကနဦးလို စည်းချက်မမှန်ဖြစ်နေတုန်းပဲ။ ဘဝမှာ မရေမတွက်နိုင်တဲ့ အကြိမ်အရေအတွက်အတိုင်း ကိုယ့်ကို ထပ်ခါတလဲလဲ ရွေးချယ်ပေးခဲ့လို့ ကျေးဇူးအများကြီးတင်ပါတယ် ချစ်သူ။ မင်းဟာ ကိုယ့်ရဲ့ နွေးထွေးတဲ့ အိမ်ကလေးဖြစ်သလို အချစ်ဆုံးသူငယ်ချင်းလည်း ဖြစ်ပါတယ်။ (၁၀)နှစ်ပြည့် အမှတ်တရ နှစ်ပတ်လည်နေ့လေးမှာ အရမ်းချစ်ပါတယ်! 🌹", icon: "fa-solid fa-pen-nib" },
+            { id: "story_3_img", label: "Chapter 3 Background Image", type: "image", icon: "fa-solid fa-image" },
+            { id: "bg_track", label: "Background Music (MP3 Link)", type: "text", defaultValue: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", icon: "fa-solid fa-music" }
+        ];
+
+        function registerManifestToStudio() {
+            window.parent.postMessage({ type: 'REGISTER_MANIFEST', schema: STUDIO_MANIFEST_SCHEMA }, '*');
+        }
+        
+        registerManifestToStudio();
+        const initSyncInterval = setInterval(registerManifestToStudio, 3000);
+
+        window.addEventListener('message', function(event) {
+            if (!event.data || event.data.type !== 'UPDATE_DATA') return;
+            clearInterval(initSyncInterval);
+            applyDynamicStudioStyles(event.data.payload);
+        });
+
+        function applyDynamicStudioStyles(data) {
+            if (!data) return;
+
+            // Password field injection runtime
+            if (data.lock_password) {
+                CORRECT_PASSWORD = data.lock_password;
+            }
+
+            if (data.bg_color) {
+                document.body.style.backgroundColor = data.bg_color;
+                const introSection = document.querySelector('.scroll-section');
+                if (introSection) introSection.style.backgroundColor = data.bg_color + "15";
+            }
+
+            if (data.card_bg) {
+                document.querySelectorAll('.reveal-card, #lock-screen > div').forEach(card => {
+                    card.style.setProperty('background-color', data.card_bg + "E6", 'important');
+                });
+            }
+
+            if (data.accent_color) {
+                document.querySelectorAll('#lock-screen > div').forEach(el => el.style.borderColor = data.accent_color);
+                document.querySelectorAll('#lock-screen div.bg-\\[\\#b53d57\\]').forEach(el => el.style.backgroundColor = data.accent_color);
+                document.querySelectorAll('#password-display, #error-msg, #days-counter, .reveal-card h1, .reveal-card h2, .reveal-card span.text-\\[\\#b53d57\\]').forEach(el => el.style.color = data.accent_color);
+                document.querySelectorAll('#lock-screen button').forEach(btn => {
+                    btn.style.color = data.accent_color;
+                    btn.style.borderColor = data.accent_color + "60";
+                });
+            }
+
+            if (data.base_font_size) {
+                document.querySelectorAll('.reveal-card p.text-sm').forEach(p => {
+                    p.style.fontSize = data.base_font_size + "px";
+                    p.style.lineHeight = (parseInt(data.base_font_size) + 8) + "px";
+                });
+            }
+
+            if (data.lock_title) document.querySelector('#lock-screen h1').innerText = data.lock_title;
+            if (data.lock_hint) document.querySelector('#lock-screen p.text-pink-200').innerText = data.lock_hint;
+            
+            const chapters = document.querySelectorAll('.scroll-section');
+            if (chapters.length >= 4) {
+                if (data.story_1_title) chapters[1].querySelector('h2').innerText = data.story_1_title;
+                if (data.story_1_desc) chapters[1].querySelector('p').innerText = data.story_1_desc;
+                if (data.story_1_img) chapters[1].querySelector('.bg-zoom-img').src = data.story_1_img;
+
+                if (data.story_2_title) chapters[2].querySelector('h2').innerText = data.story_2_title;
+                if (data.story_2_desc) chapters[2].querySelector('p').innerText = data.story_2_desc;
+                if (data.story_2_img) chapters[2].querySelector('.bg-zoom-img').src = data.story_2_img;
+
+                if (data.story_3_title) chapters[3].querySelector('h2').innerText = data.story_3_title;
+                if (data.story_3_desc) chapters[3].querySelector('p').innerText = data.story_3_desc;
+                if (data.story_3_img) chapters[3].querySelector('.bg-zoom-img').src = data.story_3_img;
+            }
+
+            if (data.bg_track) {
+                const audioSource = document.getElementById('bg-music');
+                if (audioSource && audioSource.src !== data.bg_track) {
+                    audioSource.src = data.bg_track;
+                    if (document.getElementById('music-icon-mute').classList.contains('hidden') && !audioSource.paused) {
+                        audioSource.load();
+                        audioSource.play().catch(() => {});
+                    }
+                }
+            }
+        }
+
+        function checkAndApplyUrlPayload() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const rawPayload = urlParams.get('studio_payload');
+            if (rawPayload) {
+                try {
+                    const decodedData = JSON.parse(decodeURIComponent(escape(atob(rawPayload))));
+                    setTimeout(() => applyDynamicStudioStyles(decodedData), 100);
+                } catch (e) {
+                    console.error("Failed to parse production URL studio payload:", e);
+                }
+            }
+        }
+        window.addEventListener('DOMContentLoaded', checkAndApplyUrlPayload);
+    </script>
+</body>
+</html>

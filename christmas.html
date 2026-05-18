@@ -92,8 +92,8 @@
         const templateManifest = {
             type: 'REGISTER_MANIFEST',
             schema: [
-                { id: 'queenName', type: 'text', label: 'ချစ်သူ/မွေးနေ့ရှင် အမည်', icon: 'fa-solid fa-heart', defaultValue: 'Kay Kay' },
-                { id: 'christmasWish', type: 'textarea', label: 'Christmas ဆုတောင်းစကား', icon: 'fa-solid fa-holly-berry', rows: 5, defaultValue: `Kay Kay လေးရေ... 🎄\n\n Litmatch ကနေ Kay Kay နဲ့ သိခွင့်ရခဲ့တာကို တကယ်ပဲ ဝမ်းသာမိပါတယ်။ နေရောင်ခြည်လို အမြဲတမ်း တောက်ပပြီး စိတ်ချမ်းသာပါစေလို့ ဆုတောင်းပေးပါတယ်။ နေ့ရက်တိုင်းကိုလည်း အမြဲတမ်းပျော်ရွင်နိုင်ပါစေ\n\n ပျော်ရွှင်စရာကောင်းတဲ့ Christmas လေး ဖြစ်ပါစေနော်။ ✨` },
+                { id: 'queenName', type: 'text', label: 'ချစ်သူ/မွေးနေ့ရှင် အမည်', icon: 'fa-solid fa-heart', defaultValue: 'Aye Aye' },
+                { id: 'christmasWish', type: 'textarea', label: 'Christmas ဆုတောင်းစကား', icon: 'fa-solid fa-holly-berry', rows: 5, defaultValue: `Aye Aye လေးရေ... 🎄\n\n  Aye Aye နဲ့ သိခွင့်ရခဲ့တာကို တကယ်ပဲ ဝမ်းသာမိပါတယ်။ နေရောင်ခြည်လို အမြဲတမ်း တောက်ပပြီး စိတ်ချမ်းသာပါစေလို့ ဆုတောင်းပေးပါတယ်။ နေ့ရက်တိုင်းကိုလည်း အမြဲတမ်းပျော်ရွင်နိုင်ပါစေ\n\n ပျော်ရွှင်စရာကောင်းတဲ့ Christmas လေး ဖြစ်ပါစေနော်။ ✨` },
                 { id: 'bgMusicTrack', type: 'audio', label: 'နောက်ခံသီချင်း (.mp3)', icon: 'fa-solid fa-music' },
                 { id: 'photo1', type: 'image', label: 'ဓာတ်ပုံ အမိုက်စား (၁)', icon: 'fa-solid fa-image' },
                 { id: 'photo2', type: 'image', label: 'ဓာတ်ပုံ အမိုက်စား (၂)', icon: 'fa-solid fa-image' },
@@ -103,8 +103,8 @@
         window.parent.postMessage(templateManifest, '*');
 
         // Dynamic Global State Variables
-        let dynamicQueenName = "Kay Kay";
-        let dynamicWishText = `Kay Kay လေးရေ... 🎄\n\n Litmatch ကနေ Kay Kay နဲ့ သိခွင့်ရခဲ့တာကို တကယ်ပဲ ဝမ်းသာမိပါတယ်။ နေရောင်ခြည်လို အမြဲတမ်း တောက်ပပြီး စိတ်ချမ်းသာပါစေလို့ ဆုတောင်းပေးပါတယ်။ နေ့ရက်တိုင်းကိုလည်း အမြဲတမ်းပျော်ရွင်နိုင်ပါစေ\n\n ပျော်ရွှင်စရာကောင်းတဲ့ Christmas လေး ဖြစ်ပါစေနော်။ ✨`;
+        let dynamicQueenName = "Aye Aye";
+        let dynamicWishText = `Aye Aye လေးရေ... 🎄\n\n Aye Aye နဲ့ သိခွင့်ရခဲ့တာကို တကယ်ပဲ ဝမ်းသာမိပါတယ်။ နေရောင်ခြည်လို အမြဲတမ်း တောက်ပပြီး စိတ်ချမ်းသာပါစေလို့ ဆုတောင်းပေးပါတယ်။ နေ့ရက်တိုင်းကိုလည်း အမြဲတမ်းပျော်ရွင်နိုင်ပါစေ\n\n ပျော်ရွှင်စရာကောင်းတဲ့ Christmas လေး ဖြစ်ပါစေနော်။ ✨`;
         let isSurpriseStarted = false;
 
         // 2. Control Panel မှ Audio, Images နှင့် စာသားများကို ဖမ်းယူမည့် Event Listener
