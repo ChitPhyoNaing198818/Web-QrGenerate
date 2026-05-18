@@ -346,7 +346,7 @@
       if (dynamicState.title) document.getElementById('love-title').innerText = dynamicState.title;
       if (dynamicState.sealText) document.getElementById('love-seal').innerText = dynamicState.sealText;
       
-      // 💡 Live Studio မှာ စာရိုက်နေစဉ် Typewriter Area ထဲမှာ တစ်ခါတည်း လိုက်ပြောင်းပေးနိုင်ရန်
+      // Live Studio typewriter view sync update
       const typewriterArea = document.getElementById('typewriter-text');
       if (typewriterArea && dynamicState.message) {
         typewriterArea.textContent = dynamicState.message;
@@ -372,26 +372,23 @@
       if (dynamicState.waxIcon) root.style.setProperty('--wax-icon', `"${dynamicState.waxIcon}"`);
       if (dynamicState.sideEmoji) root.style.setProperty('--side-emoji', `"${dynamicState.sideEmoji}"`);
 
-      // Audio handler setup
-      // Audio handler setup - Local mp3 ရော URL ပါ အလုပ်လုပ်စေရန် ပြင်ဆင်ပြီး
-if(dynamicState.bgMusic) {
-  const audio = document.getElementById('bg-music');
-  const src = document.getElementById('music-src');
-  
-  // လက်ရှိ audio source ရဲ့ အဆုံးသတ်က ကိုက်ညီမှု ရှိမရှိ သေချာအောင် စစ်ဆေးခြင်း
-  if(!src.src.endsWith(dynamicState.bgMusic)) {
-    src.src = dynamicState.bgMusic;
-    audio.load();
-    
-    // အကယ်၍ စာအိတ်ပွင့်နေစဉ်အတွင်း သီချင်းပြောင်းလိုက်ပါက ချက်ချင်း play ပေးရန်
-    if(isOpened && isMusicPlaying) {
-      audio.play().catch(err => console.log("Audio play blocked:", err));
-    }
-  }
-}
+      // Audio handler setup - Local mp3 and URL parsing logic
+      if(dynamicState.bgMusic) {
+        const audio = document.getElementById('bg-music');
+        const src = document.getElementById('music-src');
+        
+        if(!src.src.endsWith(dynamicState.bgMusic)) {
+          src.src = dynamicState.bgMusic;
+          audio.load();
+          
+          if(isOpened && isMusicPlaying) {
+            audio.play().catch(err => console.log("Audio play blocked:", err));
+          }
+        }
+      }
     }
 
-    // 💡 URL Params ကို TextDecoder သုံးပြီး မြန်မာစာလုံးမပျက်ဘဲ ဖတ်ယူသည့်အပိုင်း
+    // URL Param TextDecoder handling
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('studio_payload')) {
       try {
@@ -409,10 +406,16 @@ if(dynamicState.bgMusic) {
       }
     }
 
-    // Studio PostMessage Listeners
+    // Fixed Studio PostMessage Listeners
     window.addEventListener('message', (e) => {
-      if(e.data && e.data.type === 'UPDATE_STATE') {
+      if (!e.data) return;
+      if (e.data.type === 'UPDATE_DATA') {
         applyStateUpdate(e.data.payload);
+      } else if (e.data.type === 'REQUEST_SNAPSHOT') {
+        window.parent.postMessage({
+          type: 'HTML_SNAPSHOT',
+          html: document.documentElement.outerHTML
+        }, '*');
       }
     });
 
@@ -427,10 +430,8 @@ if(dynamicState.bgMusic) {
       const env = document.getElementById('envelope');
       env.classList.add('open');
       
-      // Start Music on click if allowed
       startAudio();
 
-      // Trigger Animations
       setTimeout(() => {
         typeWriterEffect();
         createParticles();
@@ -440,7 +441,7 @@ if(dynamicState.bgMusic) {
     function typeWriterEffect() {
       const text = dynamicState.message || '';
       const container = document.getElementById('typewriter-text');
-      container.textContent = ''; // clear first
+      container.textContent = ''; 
       let index = 0;
 
       function type() {
@@ -462,7 +463,7 @@ if(dynamicState.bgMusic) {
     }
 
     function toggleAudio(e) {
-      e.stopPropagation(); // Prevent envelope from triggering click
+      e.stopPropagation(); 
       const audio = document.getElementById('bg-music');
       if(isMusicPlaying) {
         audio.pause();
@@ -494,7 +495,6 @@ if(dynamicState.bgMusic) {
       }
     }
 
-    // Touch support effect trigger
     document.body.addEventListener('click', (e) => {
        if(isOpened) {
           spawnPopHearts(e.clientX, e.clientY);
@@ -520,7 +520,7 @@ if(dynamicState.bgMusic) {
             const angle = Math.random() * Math.PI * 2;
             const velocity = Math.random() * 80 + 40;
             const tx = Math.cos(angle) * velocity;
-            const ty = Math.sin(angle) * velocity - 30; // Float slightly upward
+            const ty = Math.sin(angle) * velocity - 30; 
             heart.style.transform = `translate(${tx}px, ${ty}px) scale(0)`;
             heart.style.opacity = '0';
           });
