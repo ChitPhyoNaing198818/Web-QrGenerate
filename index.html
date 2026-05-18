@@ -442,14 +442,17 @@
     function generateVercelNativeRouteLink() {
     const deployBtn = document.getElementById('deployBtn');
     const deployBtnText = document.getElementById('deployBtnText');
-    deployBtn.disabled = true; deployBtnText.innerText = "Generating live URL...";
+    deployBtn.disabled = true; 
+    deployBtnText.innerText = "Generating live URL...";
+
+    let targetedLiveUrl = "";
 
     try {
         const currentOrigin = window.location.origin;
-        let targetedLiveUrl = `${currentOrigin}/${activeSelectedFile}`;
+        let targetFile = (typeof activeSelectedFile !== 'undefined' && activeSelectedFile) ? activeSelectedFile : 'index.html';
+        targetedLiveUrl = `${currentOrigin}/${targetFile}`;
         
         if (Object.keys(stateDataStorage).length > 0) {
-            // 💡 မြန်မာစာလုံးနှင့် Emoji များအတွက် ၁၀၀ ရာခိုင်နှုန်း စိတ်ချရသော အသွင်ပြောင်းနည်းလမ်း
             const jsonString = JSON.stringify(stateDataStorage);
             const utf8Bytes = new TextEncoder().encode(jsonString);
             let binaryString = "";
@@ -460,12 +463,31 @@
             targetedLiveUrl += `?studio_payload=${base64Payload}`;
         }
 
+        // Standard အတိုင်း QR Code Modal ကို ဖွင့်လှစ်ရန် ကြိုးစားခြင်း
         showQRModalStudio(targetedLiveUrl);
+
     } catch (error) {
-        console.error("Link Generation Error:", error); // Console မှာ ဘာအမှားလဲဆိုတာ ကြည့်နိုင်ရန်
+        console.error("Link Generation Error:", error);
+        
+        // ✨ [CRITICAL FALLBACK] QR Code ဆောက်ရာတွင် စာလုံးရေ Overflow ဖြစ်ခဲ့လျှင် လင့်ခ်စာသားကို တိုက်ရိုက်ထုတ်ပေးရန်
+        if (targetedLiveUrl) {
+            const qrModal = document.getElementById("qrModal");
+            const qrContainer = document.getElementById("qrContainer");
+            const generatedLinkInput = document.getElementById("generatedLinkInput");
+
+            if (qrModal && generatedLinkInput) {
+                generatedLinkInput.value = targetedLiveUrl;
+                if (qrContainer) {
+                    qrContainer.innerHTML = "<div class='text-red-400 text-xs p-4 border border-dashed border-red-500 rounded-xl bg-red-950/30'>⚠️ စာသားပမာဏ များပြားလွန်းသဖြင့် QR Code ရုပ်ပုံ မထုတ်ပေးနိုင်သော်လည်း သင့်ဝဘ်ဆိုက်လင့်ခ်ကို အောက်တွင် အောင်မြင်စွာ တည်ဆောက်ပြီးပါပြီ။ လင့်ခ်ကို ကူးယူအသုံးပြုနိုင်ပါသည်။</div>";
+                }
+                qrModal.classList.remove("hidden");
+                return;
+            }
+        }
         alert("Link တည်ဆောက်မှု အဆင်မပြေဖြစ်သွားပါပြီ။ ထပ်မံကြိုးစားကြည့်ပေးပါဗျာ။");
     } finally {
-        deployBtn.disabled = false; deployBtnText.innerText = "Website Link နှင့် QR ကုဒ် ရယူမည်";
+        deployBtn.disabled = false; 
+        deployBtnText.innerText = "Website Link နှင့် QR ကုဒ် ရယူမည်";
     }
 }
 

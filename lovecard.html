@@ -373,14 +373,22 @@
       if (dynamicState.sideEmoji) root.style.setProperty('--side-emoji', `"${dynamicState.sideEmoji}"`);
 
       // Audio handler setup
-      if(dynamicState.bgMusic && dynamicState.bgMusic !== 'music.mp3') {
-        const audio = document.getElementById('bg-music');
-        const src = document.getElementById('music-src');
-        if(src.src !== dynamicState.bgMusic) {
-          src.src = dynamicState.bgMusic;
-          audio.load();
-        }
-      }
+      // Audio handler setup - Local mp3 ရော URL ပါ အလုပ်လုပ်စေရန် ပြင်ဆင်ပြီး
+if(dynamicState.bgMusic) {
+  const audio = document.getElementById('bg-music');
+  const src = document.getElementById('music-src');
+  
+  // လက်ရှိ audio source ရဲ့ အဆုံးသတ်က ကိုက်ညီမှု ရှိမရှိ သေချာအောင် စစ်ဆေးခြင်း
+  if(!src.src.endsWith(dynamicState.bgMusic)) {
+    src.src = dynamicState.bgMusic;
+    audio.load();
+    
+    // အကယ်၍ စာအိတ်ပွင့်နေစဉ်အတွင်း သီချင်းပြောင်းလိုက်ပါက ချက်ချင်း play ပေးရန်
+    if(isOpened && isMusicPlaying) {
+      audio.play().catch(err => console.log("Audio play blocked:", err));
+    }
+  }
+}
     }
 
     // 💡 URL Params ကို TextDecoder သုံးပြီး မြန်မာစာလုံးမပျက်ဘဲ ဖတ်ယူသည့်အပိုင်း

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 10years Anniversary</title>
+    <title>Happy Anniversary</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Padauk:wght@400;700&display=swap');
@@ -81,9 +81,7 @@
 
     <div id="particle-container" class="fixed inset-0 pointer-events-none overflow-hidden hidden z-10"></div>
 
-    <audio id="bg-music" loop preload="auto">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bg-music" loop preload="auto"></audio>
 
     <button onclick="toggleMusic()" id="music-btn" class="hidden fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-md border-2 border-[#e19ba8] text-[#b53d57] p-3 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform duration-200">
         <svg id="music-icon-play" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
@@ -97,8 +95,8 @@
     <div id="lock-screen" class="fixed inset-0 z-50 flex items-center justify-center lock-bg p-4 transition-all duration-1000">
         <div class="w-full max-w-sm bg-[#fdf2f4]/95 backdrop-blur-md rounded-[2rem] border-4 border-[#b53d57] shadow-2xl overflow-hidden transform transition-all duration-700">
             <div class="bg-[#b53d57] p-6 text-center border-b-4 border-[#8f2a3f]">
-                <h1 class="text-2xl font-bold text-white tracking-wide">
-                    Happy 10years Anniversary
+                <h1 id="lockscreen-title" class="text-2xl font-bold text-white tracking-wide">
+                    Happy 3years Anniversary
                 </h1>
                 <p class="text-pink-200 text-sm mt-2 font-light">ကိုယ်တို့ရဲ့ချစ်သူစဖြစ်တဲ့နေ့လေးကိုမှတ်မိသေးလား</p>
             </div>
@@ -134,7 +132,7 @@
         
         <section class="scroll-section flex flex-col items-center justify-center p-6 bg-[#fff6f7] text-center">
             <div class="reveal-card active max-w-xl z-20 bg-white/85 backdrop-blur-md border-4 border-[#e19ba8] rounded-[2rem] p-8 shadow-2xl transition-all duration-700">
-                <p class="text-xs tracking-widest text-[#b53d57] uppercase font-bold mb-1">တို့နှစ်ယောက်ရဲ့ ဖြတ်သန်းခဲ့တဲ့ ခရီးစဉ်</p>
+                <p id="story-sub-title" class="text-xs tracking-widest text-[#b53d57] uppercase font-bold mb-1">တို့နှစ်ယောက်ရဲ့ ဖြတ်သန်းခဲ့တဲ့ ခရီးစဉ်</p>
                 
                 <h1 id="counter-box" class="text-3xl md:text-4xl font-bold text-[#b53d57] tracking-tight my-6 min-h-[4rem] flex items-center justify-center transition-all duration-700">
                     <span id="days-counter" class="font-sans font-bold text-5xl md:text-6xl">0</span>&nbsp;Days
@@ -142,11 +140,11 @@
                 
                 <div class="grid grid-cols-3 gap-4 border-t-2 border-dashed border-[#f4ced5] pt-4 mt-4 text-[#b53d57]">
                     <div>
-                        <p class="text-lg font-bold">၁၂၀</p>
+                        <p id="months-display" class="text-lg font-bold">၃၆</p>
                         <p class="text-[10px] text-zinc-500 font-semibold">လများ</p>
                     </div>
                     <div>
-                        <p class="text-lg font-bold">၄,၃٨၀</p>
+                        <p id="smiles-display" class="text-lg font-bold">၁,၀၉၅</p>
                         <p class="text-[10px] text-zinc-500 font-semibold">အပြုံးများ</p>
                     </div>
                     <div>
@@ -179,11 +177,11 @@
             </div>
             
             <div class="reveal-card relative z-20 w-full max-w-md bg-white/90 backdrop-blur-md rounded-3xl border-2 border-[#e19ba8] p-6 md:p-8 shadow-2xl mx-4">
-                <span class="inline-block bg-[#b53d57] text-white text-[10px] px-3 py-1 rounded-full font-semibold uppercase tracking-wider mb-3">အခန်း (၂) — (၅) နှစ်ပြည့်</span>
+                <span class="inline-block bg-[#b53d57] text-white text-[10px] px-3 py-1 rounded-full font-semibold uppercase tracking-wider mb-3">အခန်း (၂) — အမှတ်တရများ</span>
                 <h2 class="text-xl font-bold text-[#b53d57] mb-2">လက်တွဲမြဲမြံစွာနဲ့ အတူတူရင့်ကျက်လာခြင်း</h2>
                 <div class="w-10 h-[2px] bg-[#e19ba8] mb-4"></div>
                 <p class="text-sm text-zinc-700 leading-relaxed font-light">
-                    ၅ နှစ်တာကာလအတွင်းမှာ တို့နှစ်ယောက်က ချစ်သူသက်သက်တင်မဟုတ်တော့ဘဲ အပြန်အလှန် အားကိုးရတဲ့ မိသားစုလို ဖြစ်လာခဲ့ကြတယ်။ အတူတူသွားခဲ့တဲ့ ခရီးစဉ်တွေ၊ အမြဲတမ်းတူတူရယ်မောခဲ့ရတဲ့ ပြက်လုံးလေးတွေနဲ့ ဖြတ်သန်းလာရင်း မင်းဟာ ကိုယ့်ဘဝအတွက် အလိုအပ်ဆုံး ရင်ခွင်တစ်ခုဆိုတာ ပိုသေချာလာခဲ့ရတယ်။ မင်းကိုချစ်ရတာဟာ ကိုယ့်အတွက်တော့ အသက်ရှူရသလိုမျိုး သဘာဝကျပြီး သက်တောင့်သက်သာရှိလွန်းပါတယ်။
+                    ဖြတ်သန်းလာတဲ့ ကာလအတွင်းမှာ တို့နှစ်ယောက်က ချစ်သူသက်သက်တင်မဟုတ်တော့ဘဲ အပြန်အလှန် အားကိုးရတဲ့ မိသားစုလို ဖြစ်လာခဲ့ကြတယ်။ အတူတူသွားခဲ့တဲ့ ခရီးစဉ်တွေ၊ အမြဲတမ်းတူတူရယ်မောခဲ့ရတဲ့ ပြက်လုံးလေးတွေနဲ့ ဖြတ်သန်းလာရင်း မင်းဟာ ကိုယ့်ဘဝအတွက် အလိုအပ်ဆုံး ရင်ခွင်တစ်ခုဆိုတာ ပိုသေချာလာခဲ့ရတယ်။ မင်းကိုချစ်ရတာဟာ ကိုယ့်အတွက်တော့ အသက်ရှူရသလိုမျိုး သဘာဝကျပြီး သက်တောင့်သက်သာရှိလွန်းပါတယ်။
                 </p>
             </div>
         </section>
@@ -194,11 +192,11 @@
             </div>
             
             <div class="reveal-card relative z-20 w-full max-w-md bg-white/90 backdrop-blur-md rounded-3xl border-2 border-[#e19ba8] p-6 md:p-8 shadow-2xl mx-4">
-                <span class="inline-block bg-[#b53d57] text-white text-[10px] px-3 py-1 rounded-full font-semibold uppercase tracking-wider mb-3">အခန်း (၃) — (၁၀) နှစ်ပြည့်</span>
-                <h2 class="text-xl font-bold text-[#b53d57] mb-2">တစ်သက်တာလုံးအတွက် ဆယ်စုနှစ်တစ်ခု</h2>
+                <span class="inline-block bg-[#b53d57] text-white text-[10px] px-3 py-1 rounded-full font-semibold uppercase tracking-wider mb-3">အခန်း (၃) — ယနေ့ခေတ်</span>
+                <h2 class="text-xl font-bold text-[#b53d57] mb-2">တစ်သက်တာလုံးအတွက် ခရီးစဉ်တစ်ခု</h2>
                 <div class="w-10 h-[2px] bg-[#e19ba8] mb-4"></div>
                 <p class="text-sm text-zinc-700 leading-relaxed font-light">
-                    ပြည့်ပြည့်စုံစုံ ဆယ်နှစ်တာကာလ၊ ၃,၆၅၂ ရက်တွေအထိ ရောက်လာခဲ့ပေမယ့် အခုထိ မင်းမျက်နှာလေးကို မြင်ရတိုင်း ရင်ခုန်သံတွေက အစကနဦးလို စည်းချက်မမှန်ဖြစ်နေတုန်းပဲ။ ဘဝမှာ မရေမတွက်နိုင်တဲ့ အကြိမ်အရေအတွက်အတိုင်း ကိုယ့်ကို ထပ်ခါတလဲလဲ ရွေးချယ်ပေးခဲ့လို့ ကျေးဇူးအများကြီးတင်ပါတယ် ချစ်သူ။ မင်းဟာ ကိုယ့်ရဲ့ နွေးထွေးတဲ့ အိမ်ကလေးဖြစ်သလို အချစ်ဆုံးသူငယ်ချင်းလည်း ဖြစ်ပါတယ်။ (၁၀)နှစ်ပြည့် အမှတ်တရ နှစ်ပတ်လည်နေ့လေးမှာ အရမ်းချစ်ပါတယ်! 🌹
+                    ပြည့်ပြည့်စုံစုံ ဖြတ်သန်းလာခဲ့တဲ့ ရက်တွေအထိ ရောက်လာခဲ့ပေမယ့် အခုထိ မင်းမျက်နှာလေးကို မြင်ရတိုင်း ရင်ခုန်သံတွေက အစကနဦးလို စည်းချက်မမှန်ဖြစ်နေတုန်းပဲ။ ဘဝမှာ မရေမတွက်နိုင်တဲ့ အကြိမ်အရေအတွက်အတိုင်း ကိုယ့်ကို ထပ်ခါတလဲလဲ ရွေးချယ်ပေးခဲ့လို့ ကျေးဇူးအများကြီးတင်ပါတယ် ချစ်သူ။ မင်းဟာ ကိုယ့်ရဲ့ နွေးထွေးတဲ့ အိမ်ကလေးဖြစ်သလို အချစ်ဆုံးသူငယ်ချင်းလည်း ဖြစ်ပါတယ်။ နှစ်ပတ်လည်နေ့လေးမှာ အရမ်းချစ်ပါတယ်! 🌹
                 </p>
             </div>
         </section>
@@ -206,9 +204,35 @@
     </div>
 
     <script>
-        let CORRECT_PASSWORD = "18052016"; // Dynamic global changeable reference password variable
+        let CORRECT_PASSWORD = "18052023"; // Changed default to 3 years password (2023)
         let currentInput = "";
         const bgMusic = document.getElementById('bg-music');
+        let anniversaryText = "မင်္ဂလာရှိသော နှစ်ပတ်လည်နေ့လေးဖြစ်ပါစေ။ 💕";
+
+        // Helper function to calculate total days from password string (DDMMYYYY)
+        function calculateDaysFromPassword(pwd) {
+            if (!pwd || pwd.length !== 8) return 1095; 
+            
+            const day = parseInt(pwd.substring(0, 2));
+            const month = parseInt(pwd.substring(2, 4)) - 1; 
+            const year = parseInt(pwd.substring(4, 8));
+            
+            const startDate = new Date(year, month, day);
+            const today = new Date();
+            
+            const diffTime = Math.abs(today - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return diffDays || 1095;
+        }
+
+        // Convert English numbers to Myanmar numbers
+        function toMyanmarNumerals(num) {
+            const myanmarDigits = ['၀', '၁', '၂', '၃', '၄', '၅', '၆', '၇', '၈', '၉'];
+            return num.toString().split('').map(digit => {
+                return myanmarDigits[digit] || digit;
+            }).join('');
+        }
 
         function pressKey(num) {
             if (currentInput.length < 8) {
@@ -257,7 +281,14 @@
                     document.getElementById('particle-container').classList.remove('hidden');
                     initHeartEngine();
 
-                    animateCounter(0, 3652, 2500); 
+                    // Calculate correct days dynamically
+                    const totalDays = calculateDaysFromPassword(CORRECT_PASSWORD);
+                    
+                    const totalMonths = Math.floor(totalDays / 30.44);
+                    document.getElementById('months-display').innerText = toMyanmarNumerals(totalMonths.toLocaleString());
+                    document.getElementById('smiles-display').innerText = toMyanmarNumerals(totalDays.toLocaleString());
+
+                    animateCounter(0, totalDays, 2500); 
                     startScrollObserver();
                 }, 700);
             } else {
@@ -290,8 +321,8 @@
                         containerBox.style.transform = "scale(0.9) translateY(-10px)";
                         
                         setTimeout(() => {
-                            containerBox.innerHTML = "မင်္ဂလာရှိသော(၁၀)နှစ်ပြည့်နှစ်ပတ်လည်နေ့လေးဖြစ်ပါစေ။ 💕";
-                            containerBox.classList.add("text-rose-500", "text-2xl", "md:text-3xl", "font-bold", "scale-105");
+                            containerBox.innerHTML = anniversaryText;
+                            containerBox.classList.add("text-rose-500", "text-xl", "md:text-2xl", "font-bold", "scale-105");
                             containerBox.style.opacity = "1";
                             containerBox.style.transform = "scale(1) translateY(0)";
                         }, 400);
@@ -347,15 +378,19 @@
         }
 
         function playMusic() {
-            bgMusic.play().catch(err => {
-                console.log("Audio autoplay restriction handled.");
-            });
+            if(bgMusic.src) {
+                bgMusic.play().catch(err => {
+                    console.log("Audio autoplay restriction handled.");
+                });
+            }
         }
 
         function toggleMusic() {
             const playIcon = document.getElementById('music-icon-play');
             const muteIcon = document.getElementById('music-icon-mute');
             
+            if (!bgMusic.src) return; // Do nothing if no file selected yet
+
             if (bgMusic.paused) {
                 bgMusic.play();
                 playIcon.classList.remove('hidden');
@@ -369,24 +404,25 @@
     </script>
 
     <script>
+        // Modified Studio Schema to accept standard dynamic file uploads instead of links
         const STUDIO_MANIFEST_SCHEMA = [
             { id: "bg_color", label: "Background Color", type: "color", defaultValue: "#df607d", icon: "fa-solid fa-palette" },
             { id: "accent_color", label: "Theme Accent (Buttons/Borders)", type: "color", defaultValue: "#b53d57", icon: "fa-solid fa-brush" },
             { id: "card_bg", label: "Card Backdrop Color", type: "color", defaultValue: "#ffffff", icon: "fa-solid fa-fill-drip" },
             { id: "base_font_size", label: "Content Font Size", type: "range", min: 12, max: 20, step: 1, defaultValue: 14, unit: "px", icon: "fa-solid fa-text-height" },
-            { id: "lock_password", label: "Lockscreen Password (8 Digits)", type: "text", defaultValue: "18052016", icon: "fa-solid fa-key" },
-            { id: "lock_title", label: "Lockscreen Heading", type: "text", defaultValue: "Happy 10years Anniversary", icon: "fa-solid fa-heading" },
+            { id: "lock_password", label: "Lockscreen Password (8 Digits)", type: "text", defaultValue: "18052023", icon: "fa-solid fa-key" },
+            { id: "lock_title", label: "Lockscreen Heading", type: "text", defaultValue: "Happy 3years Anniversary", icon: "fa-solid fa-heading" },
             { id: "lock_hint", label: "Lockscreen Hint Message", type: "text", defaultValue: "ကိုယ်တို့ရဲ့ချစ်သူစဖြစ်တဲ့နေ့လေးကိုမှတ်မိသေးလား", icon: "fa-solid fa-comment-dots" },
             { id: "story_1_title", label: "Chapter 1 Title", type: "text", defaultValue: "အရာအားလုံး စတင်ပြောင်းလဲခဲ့တဲ့အချိန်", icon: "fa-solid fa-book-open" },
             { id: "story_1_desc", label: "Chapter 1 Description", type: "textarea", defaultValue: "တို့နှစ်ယောက်ရဲ့ အစောဆုံးအတူတူရိုက်ခဲ့တဲ့ ဓာတ်ပုံလေးကို ပြန်ကြည့်တိုင်း မသိစိတ်ကနေ ပြုံးမိနေတုန်းပဲ။ အဲ့တုန်းက တို့နှစ်ယောက်စလုံးက အရမ်းငယ်ပြီး ရှက်တတ်ကြတုန်း၊ အခုလိုမျိုး လှပပြီး အဓိပ္ပာယ်ရှိတဲ့ ဆယ်စုနှစ်ခရီးစဉ်ကြီးတစ်ခုကို စတင်လျှောက်လှမ်းနေမိမှန်းတောင် သတိမထားမိခဲ့ကြဘူးနော်။ အဲ့ဒီနေ့ဟာ ကိုယ့်ကမ္ဘာကြီးရဲ့ လိုအပ်နေတဲ့အပိုင်းအစလေးကို ရှာဖွေတွေ့ရှိခဲ့တဲ့နေ့လေးပါပဲ။", icon: "fa-solid fa-pen-nib" },
             { id: "story_1_img", label: "Chapter 1 Background Image", type: "image", icon: "fa-solid fa-image" },
             { id: "story_2_title", label: "Chapter 2 Title", type: "text", defaultValue: "လက်တွဲမြဲမြံစွာနဲ့ အတူတူရင့်ကျက်လာခြင်း", icon: "fa-solid fa-book-open" },
-            { id: "story_2_desc", label: "Chapter 2 Description", type: "textarea", defaultValue: "၅ နှစ်တာကာလအတွင်းမှာ တို့နှစ်ယောက်က ချစ်သူသက်သက်တင်မဟုတ်တော့ဘဲ အပြန်အလှန် အားကိုးရတဲ့ မိသားစုလို ဖြစ်လာခဲ့ကြတယ်။ အတူတူသွားခဲ့တဲ့ ခရီးစဉ်တွေ၊ အမြဲတမ်းတူတူရယ်မောခဲ့ရတဲ့ ပြက်လုံးလေးတွေနဲ့ ဖြတ်သန်းလာရင်း မင်းဟာ ကိုယ့်ဘဝအတွက် အလိုအပ်ဆုံး ရင်ခွင်တစ်ခုဆိုတာ ပိုသေချာလာခဲ့ရတယ်။ မင်းကိုချစ်ရတာဟာ ကိုယ့်အတွက်တော့ အသက်ရှူရသလိုမျိုး သဘာဝကျပြီး သက်တောင့်သက်သာရှိလွန်းပါတယ်။", icon: "fa-solid fa-pen-nib" },
+            { id: "story_2_desc", label: "Chapter 2 Description", type: "textarea", defaultValue: "၅  နှစ်တာကာလအတွင်းမှာ တို့နှစ်ယောက်က ချစ်သူသက်သက်တင်မဟုတ်တော့ဘဲ အပြန်အလှန် အားကိုးရတဲ့ မိသားစုလို ဖြစ်လာခဲ့ကြတယ်။ အတူတူသွားခဲ့တဲ့ ခရီးစဉ်တွေ၊ အမြဲတမ်းတူတူရယ်မောခဲ့ရတဲ့ ပြက်လုံးလေးတွေနဲ့ ဖြတ်သန်းလာရင်း မင်းဟာ ကိုယ့်ဘဝအတွက် အလိုအပ်ဆုံး ရင်ခွင်တစ်ခုဆိုတာ ပိုသေချာလာခဲ့ရတယ်။ မင်းကိုချစ်ရတာဟာ ကိုယ့်အတွက်တော့ အသက်ရှူရသလိုမျိုး သဘာဝကျပြီး သက်တောင့်သက်သာရှိလွန်းပါတယ်။", icon: "fa-solid fa-pen-nib" },
             { id: "story_2_img", label: "Chapter 2 Background Image", type: "image", icon: "fa-solid fa-image" },
             { id: "story_3_title", label: "Chapter 3 Title", type: "text", defaultValue: "တစ်သက်တာလုံးအတွက် ဆယ်စုနှစ်တစ်ခု", icon: "fa-solid fa-book-open" },
             { id: "story_3_desc", label: "Chapter 3 Description", type: "textarea", defaultValue: "ပြည့်ပြည့်စုံစုံ ဆယ်နှစ်တာကာလ၊ ၃,၆၅၂ ရက်တွေအထိ ရောက်လာခဲ့ပေမယ့် အခုထိ မင်းမျက်နှာလေးကို မြင်ရတိုင်း ရင်ခုန်သံတွေက အစကနဦးလို စည်းချက်မမှန်ဖြစ်နေတုန်းပဲ။ ဘဝမှာ မရေမတွက်နိုင်တဲ့ အကြိမ်အရေအတွက်အတိုင်း ကိုယ့်ကို ထပ်ခါတလဲလဲ ရွေးချယ်ပေးခဲ့လို့ ကျေးဇူးအများကြီးတင်ပါတယ် ချစ်သူ။ မင်းဟာ ကိုယ့်ရဲ့ နွေးထွေးတဲ့ အိမ်ကလေးဖြစ်သလို အချစ်ဆုံးသူငယ်ချင်းလည်း ဖြစ်ပါတယ်။ (၁၀)နှစ်ပြည့် အမှတ်တရ နှစ်ပတ်လည်နေ့လေးမှာ အရမ်းချစ်ပါတယ်! 🌹", icon: "fa-solid fa-pen-nib" },
             { id: "story_3_img", label: "Chapter 3 Background Image", type: "image", icon: "fa-solid fa-image" },
-            { id: "bg_track", label: "Background Music (MP3 Link)", type: "text", defaultValue: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", icon: "fa-solid fa-music" }
+            { id: "bg_track", label: "Choose Audio File (MP3 Local File)", type: "file", accept: "audio/*", icon: "fa-solid fa-file-audio" } // Type 'file' handles standard local upload components inside panels
         ];
 
         function registerManifestToStudio() {
@@ -405,7 +441,6 @@
         function applyDynamicStudioStyles(data) {
             if (!data) return;
 
-            // Password field injection runtime
             if (data.lock_password) {
                 CORRECT_PASSWORD = data.lock_password;
             }
@@ -425,7 +460,7 @@
             if (data.accent_color) {
                 document.querySelectorAll('#lock-screen > div').forEach(el => el.style.borderColor = data.accent_color);
                 document.querySelectorAll('#lock-screen div.bg-\\[\\#b53d57\\]').forEach(el => el.style.backgroundColor = data.accent_color);
-                document.querySelectorAll('#password-display, #error-msg, #days-counter, .reveal-card h1, .reveal-card h2, .reveal-card span.text-\\[\\#b53d57\\]').forEach(el => el.style.color = data.accent_color);
+                document.querySelectorAll('#password-display, #error-msg, #days-counter, .reveal-card h1, .reveal-card h2, #story-sub-title, #months-display, #smiles-display').forEach(el => el.style.color = data.accent_color);
                 document.querySelectorAll('#lock-screen button').forEach(btn => {
                     btn.style.color = data.accent_color;
                     btn.style.borderColor = data.accent_color + "60";
@@ -439,7 +474,10 @@
                 });
             }
 
-            if (data.lock_title) document.querySelector('#lock-screen h1').innerText = data.lock_title;
+            if (data.lock_title) {
+                document.querySelector('#lockscreen-title').innerText = data.lock_title;
+                anniversaryText = `မင်္ဂလာရှိသော ${data.lock_title} လေးဖြစ်ပါစေ။ 💕`;
+            }
             if (data.lock_hint) document.querySelector('#lock-screen p.text-pink-200').innerText = data.lock_hint;
             
             const chapters = document.querySelectorAll('.scroll-section');
@@ -457,14 +495,21 @@
                 if (data.story_3_img) chapters[3].querySelector('.bg-zoom-img').src = data.story_3_img;
             }
 
+            // Handles local browser file stream mappings seamlessly 
             if (data.bg_track) {
-                const audioSource = document.getElementById('bg-music');
-                if (audioSource && audioSource.src !== data.bg_track) {
-                    audioSource.src = data.bg_track;
-                    if (document.getElementById('music-icon-mute').classList.contains('hidden') && !audioSource.paused) {
-                        audioSource.load();
-                        audioSource.play().catch(() => {});
-                    }
+                // If it's a File Object from local input or a local raw stream blob
+                if (data.bg_track instanceof File || data.bg_track instanceof Blob) {
+                    const audioUrl = URL.createObjectURL(data.bg_track);
+                    bgMusic.src = audioUrl;
+                } else if (typeof data.bg_track === 'string') {
+                    // Fallback configuration if string url arrives
+                    bgMusic.src = data.bg_track;
+                }
+                
+                // If password is already successfully bypassed, autoplay the selected track right away
+                if (document.getElementById('lock-screen').style.display === 'none') {
+                    bgMusic.load();
+                    bgMusic.play().catch(() => {});
                 }
             }
         }
