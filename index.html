@@ -17,7 +17,6 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     
     <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     
@@ -60,7 +59,6 @@
                 animation: none !important;
             }
             .preview-mobile::before { display: none !important; }
-            .mobile-sidebar-drawer { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         }
 
         .preview-mobile iframe {
@@ -81,144 +79,81 @@
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300 overflow-x-hidden">
 
-    <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-lg px-4 lg:px-6 py-4 flex justify-between items-center transition-colors z-40 relative">
-        <div class="flex items-center space-x-3">
-            <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 text-white p-2.5 rounded-xl shadow-md">
-                <i class="fa-solid fa-mobile-screen text-xl"></i>
-            </div>
-            <div>
-                <h1 class="text-md lg:text-lg font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-400">Template Studio</h1>
-                <p class="text-[10px] lg:text-xs text-slate-500 dark:text-slate-400">Dynamic UI Pipeline Engine</p>
-            </div>
-        </div>
+    <div class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
         
-        <div class="flex items-center space-x-2 lg:space-x-4">
-            <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-amber-500 dark:text-yellow-400 transition-all">
-                <i id="themeIcon" class="fa-solid fa-moon text-md dark:hidden"></i>
-                <i id="themeIconDark" class="fa-solid fa-sun text-md hidden dark:inline-block"></i>
-            </button>
-            <button onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition-all focus:outline-none">
-                <i id="hamburgerIcon" class="fa-solid fa-bars text-md"></i>
-            </button>
-        </div>
-    </header>
-
-    <div id="sidebarOverlay" onclick="toggleMobileMenu()" class="hidden lg:hidden fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-40 transition-opacity"></div>
-
-    <div class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        
-        <aside id="layoutSidebar" class="mobile-sidebar-drawer fixed lg:static top-0 left-0 bottom-0 w-[290px] lg:w-auto h-full lg:h-auto bg-white dark:bg-slate-900 lg:bg-transparent lg:dark:bg-transparent border-r lg:border-r-0 border-slate-200 dark:border-slate-800 p-5 lg:p-0 z-50 lg:z-auto -translate-x-full lg:translate-x-0 col-span-1 lg:col-span-3 space-y-4 overflow-y-auto lg:overflow-y-visible">
-            <div class="flex lg:hidden justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800 mb-2">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Layout Menu</span>
-                <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
+        <aside id="layoutSidebar" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl col-span-1 lg:col-span-3 space-y-4 max-h-[680px] overflow-y-auto">
             <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
                 <i class="fa-solid fa-folder-open text-blue-500"></i> Active Layouts
             </h2>
 
             <div class="space-y-3">
-                <div id="btn-index" onclick="switchTemplateFile('index.html', 'btn-index')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:translate-x-2 hover:scale-[1.02] hover:border-pink-400 dark:hover:border-pink-500 shadow-sm hover:shadow-md">
-                    <div class="bg-slate-100 dark:bg-slate-800 text-pink-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700 group-hover:animate-bounce"><i class="fa-solid fa-envelope text-lg"></i></div>
+                <div id="btn-index" onclick="switchTemplateFile('index.html', 'btn-index')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
+                    <div class="bg-slate-100 dark:bg-slate-800 text-pink-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-envelope text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Digital Love Card</h3><p class="text-[11px] text-slate-400">index.html</p></div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 dark:text-slate-600 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
 
-                <div id="btn-cv" onclick="switchTemplateFile('cv.html', 'btn-cv')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:translate-x-2 hover:scale-[1.02] hover:border-rose-400 dark:hover:border-rose-500 shadow-sm hover:shadow-md">
-                    <div class="bg-slate-100 dark:bg-slate-800 text-rose-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700 group-hover:animate-pulse"><i class="fa-solid fa-heart text-lg"></i></div>
+                <div id="btn-cv" onclick="switchTemplateFile('cv.html', 'btn-cv')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
+                    <div class="bg-slate-100 dark:bg-slate-800 text-rose-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-heart text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Will You Be Mine</h3><p class="text-[11px] text-slate-400">cv.html</p></div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 dark:text-slate-600 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
 
-                <div id="btn-blog" onclick="switchTemplateFile('blog.html', 'btn-blog')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:translate-x-2 hover:scale-[1.02] hover:border-amber-400 dark:hover:border-amber-500 shadow-sm hover:shadow-md">
+                <div id="btn-blog" onclick="switchTemplateFile('blog.html', 'btn-blog')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
                     <div class="bg-slate-100 dark:bg-slate-800 text-amber-400 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-gift text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Personal Surprise Blog</h3><p class="text-[11px] text-slate-400">blog.html</p></div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 dark:text-slate-600 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
 
-                <div id="btn-birthday" onclick="switchTemplateFile('birthday.html', 'btn-birthday')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:translate-x-2 hover:scale-[1.02] hover:border-indigo-400 dark:hover:border-indigo-500 shadow-sm hover:shadow-md">
+                <div id="btn-birthday" onclick="switchTemplateFile('birthday.html', 'btn-birthday')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
                     <div class="bg-slate-100 dark:bg-slate-800 text-indigo-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-cake-candles text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Happy Birthday</h3><p class="text-[11px] text-slate-400">birthday.html</p></div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 dark:text-slate-600 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
 
-                <div id="btn-christmas" onclick="switchTemplateFile('christmas.html', 'btn-christmas')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:translate-x-2 hover:scale-[1.02] hover:border-emerald-400 dark:hover:border-emerald-500 shadow-sm hover:shadow-md">
+                <div id="btn-christmas" onclick="switchTemplateFile('christmas.html', 'btn-christmas')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
                     <div class="bg-slate-100 dark:bg-slate-800 text-emerald-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-tree text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Merry Christmas</h3><p class="text-[11px] text-slate-400">christmas.html</p></div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 dark:text-slate-600 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
 
-                <div id="btn-anniversary" onclick="switchTemplateFile('anniversary.html', 'btn-anniversary')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:translate-x-2 hover:scale-[1.02] hover:border-purple-400 dark:hover:border-purple-500 shadow-sm hover:shadow-md">
+                <div id="btn-anniversary" onclick="switchTemplateFile('anniversary.html', 'btn-anniversary')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
                     <div class="bg-slate-100 dark:bg-slate-800 text-purple-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-ring text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Happy Anniversary</h3><p class="text-[11px] text-slate-400">anniversary.html</p></div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 dark:text-slate-600 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
 
-                <div id="btn-friendship" onclick="switchTemplateFile('friendship.html', 'btn-friendship')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:translate-x-2 hover:scale-[1.02] hover:border-cyan-400 dark:hover:border-cyan-500 shadow-sm hover:shadow-md">
+                <div id="btn-friendship" onclick="switchTemplateFile('friendship.html', 'btn-friendship')" class="template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm">
                     <div class="bg-slate-100 dark:bg-slate-800 text-cyan-500 p-3 rounded-xl border border-slate-200 dark:border-slate-700"><i class="fa-solid fa-user-group text-lg"></i></div>
                     <div class="flex-1 min-w-0"><h3 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-0.5 truncate">Friendship Memoir</h3><p class="text-[11px] text-slate-400">friendship.html</p></div>
-                    <i class="fa-solid fa-chevron-right text-slate-400 dark:text-slate-600 text-xs group-hover:translate-x-1 transition-transform"></i>
                 </div>
-            </div>
-
-            <div id="actionPromptCard" class="bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border border-blue-500/30 rounded-2xl p-4 text-center animate-pulse-slow">
-                <i class="fa-solid fa-hand-pointer text-blue-500 text-xl mb-2"></i>
-                <h4 class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 mb-1">ဆော့ဖ်ဝဲလ် အသုံးပြုရန်</h4>
-                <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">ပြင်ဆင်မှုများ ပြုလုပ်နိုင်ရန်အတွက် ဘယ်ဘက်မှ Layout တစ်ခုခုကို ရွေးချယ်ပေးပါ။</p>
             </div>
         </aside>
 
-        <section id="modificationControlPanel" class="col-span-1 lg:col-span-4 space-y-4 opacity-0 hidden scale-95 panel-transition order-3 lg:order-2">
-            <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-500 mb-2 flex items-center gap-2">
-                <i class="fa-solid fa-sliders"></i> Modification Studio
-            </h2>
-            
+        <section id="modificationControlPanel" class="col-span-1 lg:col-span-4 space-y-4 opacity-0 hidden scale-95 panel-transition">
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col justify-between">
                 <div>
                     <div class="bg-gradient-to-r from-indigo-500/10 to-blue-500/10 px-5 py-3 border-b border-slate-200 dark:border-slate-800">
                         <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide flex items-center gap-1.5">
-                            <i class="fa-solid fa-pencil text-[10px]"></i> စိတ်ကြိုက်ပြင်ဆင်ပါ
+                            <i class="fa-solid fa-pencil text-[10px]"></i> Customize Layout Studio
                         </span>
                     </div>
-
-                    <div id="dynamicFormContainer" class="p-5 space-y-5 max-h-[450px] overflow-y-auto"></div>
+                    <div id="dynamicFormContainer" class="p-5 space-y-5 max-h-[430px] overflow-y-auto"></div>
                 </div>
 
                 <div class="p-4 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30">
-                    <button id="deployBtn" onclick="deployUserWebsite()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> <span id="deployBtnText">Website အဖြစ် Live လွှင့်မည် (Free)</span>
+                    <button id="deployBtn" onclick="generateVercelNativeRouteLink()" class="w-full bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-link"></i> <span id="deployBtnText">Website Link နှင့် QR ကုဒ် ရယူမည်</span>
                     </button>
                 </div>
             </div>
         </section>
 
-        <main id="previewViewportContainer" class="col-span-1 lg:col-span-9 flex flex-col items-center order-2 lg:order-3">
-            <div class="w-full border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-2xl bg-slate-950 flex flex-col h-[520px] lg:h-[700px] relative">
+        <main id="previewViewportContainer" class="col-span-1 lg:col-span-9 flex flex-col items-center">
+            <div class="w-full border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-2xl bg-slate-950 flex flex-col h-[550px] lg:h-[680px] relative">
                 
-                <div id="viewportBlanketOverlay" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-6 text-transition" style="transition: opacity 0.5s ease;">
-                    <div class="w-16 h-16 bg-slate-900/80 border border-slate-700 rounded-2xl flex items-center justify-center text-slate-400 mb-4 animate-bounce">
-                        <i class="fa-solid fa-mobile-button text-2xl"></i>
+                <div id="viewportBlanketOverlay" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-6" style="transition: opacity 0.5s ease;">
+                    <div class="w-14 h-14 bg-slate-900/80 border border-slate-700 rounded-2xl flex items-center justify-center text-slate-400 mb-3 animate-bounce">
+                        <i class="fa-solid fa-mobile-button text-xl"></i>
                     </div>
-                    <h3 class="text-md font-bold text-white mb-1">Awaiting Layout Choice</h3>
-                    <p class="text-xs text-slate-400 max-w-xs">Select a design layout from the left panel menu to activate preview engine.</p>
+                    <h3 class="text-sm font-bold text-white mb-1">Select Design to Edit</h3>
                 </div>
 
-                <div class="bg-slate-100 dark:bg-slate-900 px-4 py-2.5 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 z-10">
-                    <div class="flex items-center space-x-4 flex-1">
-                        <div class="flex space-x-1.5">
-                            <span class="w-2.5 h-2.5 bg-red-500 rounded-full inline-block"></span>
-                            <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full inline-block"></span>
-                            <span class="w-2.5 h-2.5 bg-green-500 rounded-full inline-block"></span>
-                        </div>
-                        <div class="bg-white dark:bg-slate-950 text-[11px] text-slate-400 rounded-lg px-3 py-1 flex-1 max-w-md font-mono truncate border border-slate-200 dark:border-slate-700 shadow-inner">
-                            <span class="text-slate-400 dark:text-slate-600">mobile://</span><span id="browserUrlField" class="text-slate-800 dark:text-slate-200 font-bold">no-file-selected</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex-1 bg-slate-900/60 p-2 lg:p-4 flex items-center justify-center overflow-hidden">
+                <div class="flex-1 bg-slate-900/60 p-4 flex items-center justify-center overflow-hidden">
                     <div class="preview-mobile">
                         <iframe id="previewIframe" src="about:blank"></iframe>
                     </div>
@@ -232,57 +167,38 @@
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-2xl w-full p-6 text-center shadow-2xl transform scale-95 transition-all duration-300 grid grid-cols-1 md:grid-cols-2 gap-6" id="qrModalContent">
             
             <div class="flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-slate-100 dark:border-slate-800 pb-6 md:pb-0 md:pr-6">
-                <div class="w-12 h-12 bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center mb-3">
+                <div class="w-12 h-12 bg-indigo-500/10 text-indigo-500 rounded-2xl flex items-center justify-center mb-3">
                     <i class="fa-solid fa-circle-check text-2xl"></i>
                 </div>
-                <h3 class="text-md font-bold text-slate-900 dark:text-white mb-1">Website Live ဖြစ်သွားပါပြီ!</h3>
-                <p class="text-[11px] text-slate-400 mb-5">QR Style ကို စိတ်ကြိုက် ပြင်ဆင်နိုင်ပါတယ်ဗျာ။</p>
-                
-                <div class="bg-white p-4 rounded-2xl inline-block shadow-lg border border-slate-100 mb-2">
+                <h3 class="text-md font-bold text-slate-900 dark:text-white mb-1">Link အောင်မြင်စွာ ထုတ်ပြီးပါပြီ!</h3>
+                <div class="bg-white p-4 rounded-2xl inline-block shadow-lg border border-slate-100 mt-2">
                     <div id="qrcodeCanvas" class="flex items-center justify-center min-w-[180px] min-h-[180px]"></div>
                 </div>
             </div>
 
             <div class="text-left flex flex-col justify-between space-y-4">
                 <div>
-                    <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1">
-                        <i class="fa-solid fa-palette text-indigo-500"></i> QR Shape Studio Mode
-                    </h4>
-                    
+                    <h4 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-3">QR Custom Studio</h4>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">QR ကွက် အခြေခံအရောင် (Core Color)</label>
-                            <div class="flex items-center gap-2">
-                                <input type="color" id="qrDotColor" value="#0f172a" onchange="regenerateCustomQR()" class="w-8 h-8 border-0 rounded-lg cursor-pointer bg-transparent">
-                                <span class="text-[11px] font-mono text-slate-400">Choose Dot Palette</span>
-                            </div>
+                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">QR Matrix Core Color</label>
+                            <input type="color" id="qrDotColor" value="#0f172a" onchange="regenerateCustomQR()" class="w-8 h-8 border-0 rounded-lg cursor-pointer bg-transparent">
                         </div>
-
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">နောက်ခံအရောင် (Background Color)</label>
-                            <div class="flex items-center gap-2">
-                                <input type="color" id="qrBgColor" value="#ffffff" onchange="regenerateCustomQR()" class="w-8 h-8 border-0 rounded-lg cursor-pointer bg-transparent">
-                                <span class="text-[11px] font-mono text-slate-400">Choose Background Matrix</span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">QR ကွက် ပုံသဏ္ဌာန် (Dots Shape)</label>
-                            <select id="qrDotStyle" onchange="regenerateCustomQR()" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500">
-                                <option value="heart">💖 Heart Gradient (နှလုံးသားစတိုင်)</option>
-                                <option value="dots">🟢 Rounded Dots (အဝိုင်းစက်ကွက်)</option>
-                                <option value="extra-rounded">✨ Extra Rounded (အလွန်ချောမွေ့သော)</option>
-                                <option value="classy">🌀 Classy Wave (လှိုင်းတွန့်ဒီဇိုင်း)</option>
-                                <option value="square">⬛ Classic Square (ရိုးရိုးစတုရန်း)</option>
+                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">QR Dots Matrix Shape</label>
+                            <select id="qrDotStyle" onchange="regenerateCustomQR()" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-700 dark:text-white outline-none">
+                                <option value="heart">💖 Heart Gradient Flow</option>
+                                <option value="dots">🟢 Rounded Smooth Dots</option>
+                                <option value="extra-rounded">✨ Extra Edge Rounded</option>
+                                <option value="square">⬛ Standard Classic Square</option>
                             </select>
                         </div>
-
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">ထောင့်ကွက်ပုံစံ (Corners Shape)</label>
-                            <select id="qrCornerStyle" onchange="regenerateCustomQR()" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-700 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500">
-                                <option value="extra-rounded">⭕ Smooth Circle (အဝိုင်းပုံစံ)</option>
-                                <option value="rounded">📐 Rounded Corner (ထောင့်ကွေးပုံစံ)</option>
-                                <option value="square">🔲 Classic Square (စတုရန်းစစ်စစ်)</option>
+                            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Corners Eyeball Shape</label>
+                            <select id="qrCornerStyle" onchange="regenerateCustomQR()" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-700 dark:text-white outline-none">
+                                <option value="extra-rounded">⭕ Smooth Geometric Circle</option>
+                                <option value="rounded">📐 Fluid Rounded Corner</option>
+                                <option value="square">🔲 Standard Square Eye</option>
                             </select>
                         </div>
                     </div>
@@ -291,66 +207,36 @@
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5">
                         <input type="text" id="generatedLinkInput" readonly class="bg-transparent text-[11px] font-mono text-slate-600 dark:text-slate-300 flex-1 outline-none px-2 truncate">
-                        <button onclick="copyGeneratedLink()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1 rounded-lg text-xs transition-all">Copy</button>
+                        <button onclick="copyGeneratedLink()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1 rounded-lg text-xs">Copy</button>
                     </div>
-
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="downloadQRImage()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-download"></i> QR ဒေါင်းလုဒ်
-                        </button>
-                        <button onclick="closeQRModal()" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2 px-3 rounded-xl text-xs transition-all">
-                            ပိတ်မည်
-                        </button>
+                        <button onclick="downloadQRImage()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1.5"><i class="fa-solid fa-download"></i> QR ဒေါင်းလုဒ်</button>
+                        <button onclick="closeQRModal()" class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2 px-3 rounded-xl text-xs">ပိတ်မည်</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
     <script>
         let setupCompleted = false;
-        let currentTemplateFormSchema = [];
         let stateDataStorage = {};
-        let isMobileMenuOpen = false;
-        let lastKnownIframeHTML = ""; 
-        
-        let currentGeneratedUrl = "";
+        let activeSelectedFile = "";
+        let lastKnownSnapshotHTML = "";
         let qrCodeInstance = null;
 
-        function toggleTheme() { document.documentElement.classList.toggle('dark'); }
-
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('layoutSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            isMobileMenuOpen = !isMobileMenuOpen;
-            if (isMobileMenuOpen) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            }
-        }
-
         function switchTemplateFile(fileName, cardId) {
+            activeSelectedFile = fileName;
             document.getElementById('previewIframe').src = fileName;
-            document.getElementById('browserUrlField').innerText = fileName;
-
+            
             const allCards = document.querySelectorAll('.template-card');
             allCards.forEach(card => {
-                card.className = "template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:translate-x-2 hover:scale-[1.02] shadow-sm hover:shadow-md";
+                card.className = "template-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 cursor-pointer flex items-center space-x-3 group transition-all duration-300 hover:scale-[1.02] shadow-sm";
             });
-
-            document.getElementById(cardId).className = "template-card p-4 rounded-xl border border-indigo-500 bg-indigo-600/10 dark:bg-indigo-600/5 cursor-pointer flex items-center space-x-3 group transition-all duration-300 shadow-md scale-[1.02] translate-x-2";
-
-            if (window.innerWidth < 1024 && isMobileMenuOpen) {
-                toggleMobileMenu();
-            }
+            document.getElementById(cardId).className = "template-card p-4 rounded-xl border border-indigo-500 bg-indigo-600/10 dark:bg-indigo-600/5 cursor-pointer flex items-center space-x-3 group transition-all duration-300 shadow-md scale-[1.02]";
 
             if (!setupCompleted) {
                 setupCompleted = true;
-                document.getElementById('actionPromptCard').style.display = 'none';
                 const overlay = document.getElementById('viewportBlanketOverlay');
                 overlay.style.opacity = '0';
                 setTimeout(() => overlay.style.display = 'none', 500);
@@ -364,14 +250,11 @@
 
         window.addEventListener('message', function(event) {
             if (!event.data) return;
-            
             if (event.data.type === 'REGISTER_MANIFEST') {
-                currentTemplateFormSchema = event.data.schema;
                 buildDynamicStudioForm(event.data.schema);
             }
-            
             if (event.data.type === 'HTML_SNAPSHOT') {
-                lastKnownIframeHTML = event.data.html;
+                lastKnownSnapshotHTML = event.data.html;
             }
         });
 
@@ -382,47 +265,32 @@
 
             schema.forEach(field => {
                 stateDataStorage[field.id] = field.defaultValue || '';
-                
                 const fieldWrapper = document.createElement('div');
                 fieldWrapper.className = "space-y-1.5";
-
-                const label = document.createElement('label');
-                label.className = "block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider";
-                label.innerHTML = `<i class="${field.icon} text-indigo-500 mr-1.5"></i> ${field.label}`;
-                fieldWrapper.appendChild(label);
+                fieldWrapper.innerHTML = `<label class="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider"><i class="${field.icon} text-indigo-500 mr-1.5"></i> ${field.label}</label>`;
 
                 if (field.type === 'text') {
                     const input = document.createElement('input');
-                    input.type = 'text';
-                    input.value = field.defaultValue;
-                    input.className = "w-full px-4 py-2.5 bg-slate-50 focus:bg-white dark:bg-slate-950 dark:focus:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition";
+                    input.type = 'text'; input.value = field.defaultValue;
+                    input.className = "w-full px-4 py-2.5 bg-slate-50 focus:bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition";
                     input.addEventListener('input', (e) => updateStateAndSync(field.id, e.target.value));
                     fieldWrapper.appendChild(input);
-
                 } else if (field.type === 'textarea') {
                     const textarea = document.createElement('textarea');
-                    textarea.rows = field.rows || 3;
-                    textarea.value = field.defaultValue;
-                    textarea.className = "w-full px-4 py-2.5 bg-slate-50 focus:bg-white dark:bg-slate-950 dark:focus:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none";
+                    textarea.rows = 3; textarea.value = field.defaultValue;
+                    textarea.className = "w-full px-4 py-2.5 bg-slate-50 focus:bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500 transition resize-none";
                     textarea.addEventListener('input', (e) => updateStateAndSync(field.id, e.target.value));
                     fieldWrapper.appendChild(textarea);
-
-                } else if (field.type === 'image') {
+                } else if (field.type === 'image' || field.type === 'audio') {
                     const slotId = Math.random().toString(36).substring(7);
-                    const imageWrapper = document.createElement('div');
-                    imageWrapper.className = "relative bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 flex items-center justify-between";
-                    
-                    imageWrapper.innerHTML = `
-                        <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
-                        <div class="flex items-center space-x-2.5 max-w-[85%]">
-                            <div class="bg-indigo-500/10 text-indigo-500 text-xs font-bold w-6 h-6 rounded-md flex items-center justify-center"><i class="fa-solid fa-image text-[10px]"></i></div>
-                            <span id="lbl-${slotId}" class="text-xs text-slate-400 truncate font-medium">Upload ${field.label}...</span>
-                        </div>
+                    const fileWrapper = document.createElement('div');
+                    fileWrapper.className = "relative bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 flex items-center justify-between";
+                    fileWrapper.innerHTML = `
+                        <input type="file" accept="${field.type === 'image' ? 'image/*' : 'audio/mp3, audio/*'}" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                        <span id="lbl-${slotId}" class="text-xs text-slate-400 truncate">Upload ${field.label}...</span>
                         <i class="fa-solid fa-cloud-arrow-up text-slate-400 text-xs"></i>
                     `;
-
-                    const fileInput = imageWrapper.querySelector('input');
-                    fileInput.addEventListener('change', function() {
+                    fileWrapper.querySelector('input').addEventListener('change', function() {
                         const file = this.files[0];
                         if (file) {
                             document.getElementById(`lbl-${slotId}`).innerText = file.name;
@@ -431,44 +299,16 @@
                             reader.readAsDataURL(file);
                         }
                     });
-                    fieldWrapper.appendChild(imageWrapper);
-
-                } else if (field.type === 'audio') {
-                    const slotId = Math.random().toString(36).substring(7);
-                    const audioWrapper = document.createElement('div');
-                    audioWrapper.className = "relative bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 flex items-center justify-between";
-                    
-                    audioWrapper.innerHTML = `
-                        <input type="file" accept="audio/mp3, audio/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
-                        <div class="flex items-center space-x-2.5 max-w-[85%]">
-                            <div class="bg-emerald-500/10 text-emerald-500 text-xs font-bold w-6 h-6 rounded-md flex items-center justify-center"><i class="fa-solid fa-music text-[10px]"></i></div>
-                            <span id="lbl-${slotId}" class="text-xs text-slate-400 truncate font-medium">Upload MP3 Background Music...</span>
-                        </div>
-                        <i class="fa-solid fa-file-audio text-slate-400 text-xs"></i>
-                    `;
-
-                    const fileInput = audioWrapper.querySelector('input');
-                    fileInput.addEventListener('change', function() {
-                        const file = this.files[0];
-                        if (file) {
-                            document.getElementById(`lbl-${slotId}`).innerText = file.name;
-                            const reader = new FileReader();
-                            reader.onload = function(e) { updateStateAndSync(field.id, e.target.result); };
-                            reader.readAsDataURL(file);
-                        }
-                    });
-                    fieldWrapper.appendChild(audioWrapper);
+                    fieldWrapper.appendChild(fileWrapper);
                 }
-
                 container.appendChild(fieldWrapper);
             });
-
             dispatchDataToIframe();
         }
 
-        function updateStateAndSync(key, value) {
-            stateDataStorage[key] = value;
-            dispatchDataToIframe();
+        function updateStateAndSync(key, value) { 
+            stateDataStorage[key] = value; 
+            dispatchDataToIframe(); 
         }
 
         function dispatchDataToIframe() {
@@ -480,108 +320,49 @@
 
         document.getElementById('previewIframe').addEventListener('load', dispatchDataToIframe);
 
-        // 🚀 100% CORRECTION STABLE DEPLOY PIPELINE ENGINE
-        async function deployUserWebsite() {
-            const iframe = document.getElementById('previewIframe');
-            if (!iframe || iframe.src === 'about:blank') {
-                alert('ကျေးဇူးပြု၍ အရင်ဦးစွာ ဘယ်ဘက်မှ Layout တစ်ခုခုကို ရွေးချယ်ပြင်ဆင်ပေးပါဗျာ။');
-                return;
-            }
-
+        // 🚀 VERCEL CRYPTO ROUTING DEPLOY ENGINE (100% Client Stable)
+        function generateVercelNativeRouteLink() {
             const deployBtn = document.getElementById('deployBtn');
             const deployBtnText = document.getElementById('deployBtnText');
-
-            let htmlContentToDeploy = "";
-            if (lastKnownIframeHTML) {
-                htmlContentToDeploy = lastKnownIframeHTML;
-            } else {
-                try {
-                    htmlContentToDeploy = iframe.contentWindow.document.documentElement.outerHTML;
-                } catch(e) {
-                    alert('⚠️ Layout Data ကို ဖတ်ယူ၍မရသေးပါဗျာ။ စက္ကန့်အနည်းငယ်စောင့်ပြီး ပြန်နှိပ်ပေးပါ။');
-                    return;
-                }
-            }
-
-            // Heavy Base64 Audio Optimization Bypass
-            if (htmlContentToDeploy.includes("data:audio/")) {
-                const regexAudio = /"data:audio\/[^"]+"/g;
-                htmlContentToDeploy = htmlContentToDeploy.replace(regexAudio, '"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"');
-            }
-
-            // UI Loading & Anti-Rate-Limit Initialization
-            deployBtn.disabled = true;
-            deployBtnText.innerText = "Netlify သို့ ချိတ်ဆက်တင်နေပါပြီ...";
+            deployBtn.disabled = true; deployBtnText.innerText = "Generating live URL...";
 
             try {
-                const zip = new JSZip();
-                zip.file("index.html", htmlContentToDeploy); 
-                const zippedBlob = await zip.generateAsync({ type: "blob" });
-
-                const NETLIFY_API_KEY = "nfp_D9jKazGpJi4AbLgVed6X7VWS8d8XkcGsee0f"; 
-
-                // Tunnelling Direct Clean Secure Route Response
-                const response = await fetch("https://api.netlify.com/api/v1/sites", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${NETLIFY_API_KEY}`,
-                        "Content-Type": "application/zip"
-                    },
-                    body: zippedBlob
-                });
-
-                if (!response.ok) {
-                    if(response.status === 429) {
-                        throw new Error("Rate limit exceeded. Please wait 3 minutes.");
-                    }
-                    throw new Error("Deployment API respond status error");
+                const currentOrigin = window.location.origin;
+                let targetedLiveUrl = `${currentOrigin}/${activeSelectedFile}`;
+                
+                if (Object.keys(stateDataStorage).length > 0) {
+                    // JSON state data ကို ယူနီကုဒ်မပျက်စေဘဲ Base64 သို့ ကောင်းမွန်စွာ ပြောင်းလဲသယ်ဆောင်ခြင်း
+                    const base64Payload = btoa(unescape(encodeURIComponent(JSON.stringify(stateDataStorage))));
+                    targetedLiveUrl += `?studio_payload=${base64Payload}`;
                 }
 
-                const apiResult = await response.json();
-
-                if (apiResult && apiResult.ssl_url) {
-                    showQRModalStudio(apiResult.ssl_url);
-                } else {
-                    alert("⚠️ Netlify မှ တိုက်ရိုက်ဒေတာ ဖတ်ယူ၍ မရနိုင်သေးပါ။ ခေတ္တစောင့်ပြီး ပြန်လုပ်ကြည့်ပါဗျာ။");
-                }
-
+                showQRModalStudio(targetedLiveUrl);
             } catch (error) {
-                console.error("Netlify Cloud Error:", error);
-                alert("❌ Deployment မအောင်မြင်ပါ။ မကြာခဏ ဆက်တိုက်တင်လွန်းပါက Netlify Rate Limit ပြည့်တတ်သဖြင့် ၃ မိနစ်ခန့် စောင့်ဆိုင်းပေးပြီးမှ ပြန်လည်စမ်းသပ်ပေးပါဗျာ။");
+                alert("❌ Link တည်ဆောက်မှု အဆင်မပြေဖြစ်သွားပါပြီ။ ထပ်မံကြိုးစားကြည့်ပေးပါဗျာ။");
             } finally {
-                deployBtn.disabled = false;
-                deployBtnText.innerText = "Website အဖြစ် Live လွှင့်မည် (Free)";
+                deployBtn.disabled = false; deployBtnText.innerText = "Website Link နှင့် QR ကုဒ် ရယူမည်";
             }
         }
 
         function showQRModalStudio(url) {
-            currentGeneratedUrl = url;
             document.getElementById("generatedLinkInput").value = url;
-            
-            qrCodeInstance = new QRCodeStyling({
-                width: 180,
-                height: 180,
-                data: currentGeneratedUrl,
+            qrCodeInstance = new QRCodeStyling({ 
+                width: 180, 
+                height: 180, 
+                data: url, 
                 margin: 4,
                 qrOptions: { typeNumber: "0", mode: "Byte", errorCorrectionLevel: "Q" },
-                backgroundOptions: { color: "#ffffff" }
+                backgroundOptions: { color: "#ffffff" } 
             });
-
             regenerateCustomQR();
-
-            const modal = document.getElementById("qrModal");
-            modal.classList.remove("hidden");
-            setTimeout(() => {
-                document.getElementById("qrModalContent").classList.replace("scale-95", "scale-100");
-            }, 50);
+            document.getElementById("qrModal").classList.remove("hidden");
+            setTimeout(() => { document.getElementById("qrModalContent").classList.replace("scale-95", "scale-100"); }, 50);
         }
 
         function regenerateCustomQR() {
             const qrContainer = document.getElementById("qrcodeCanvas");
-            qrContainer.innerHTML = ""; 
-
+            qrContainer.innerHTML = "";
             const dotColor = document.getElementById("qrDotColor").value;
-            const bgColor = document.getElementById("qrBgColor").value;
             const dotStyle = document.getElementById("qrDotStyle").value;
             const cornerStyle = document.getElementById("qrCornerStyle").value;
 
@@ -589,15 +370,9 @@
             let cornersSquareType = "square";
             let cornersDotType = "square";
 
-            if (dotStyle === 'heart') {
-                dotsType = "classy-rounded"; 
-            } else if (dotStyle === 'dots') {
-                dotsType = "dots";
-            } else if (dotStyle === 'extra-rounded') {
-                dotsType = "extra-rounded";
-            } else if (dotStyle === 'classy') {
-                dotsType = "classy";
-            }
+            if (dotStyle === 'heart') dotsType = "classy-rounded";
+            else if (dotStyle === 'dots') dotsType = "dots";
+            else if (dotStyle === 'extra-rounded') dotsType = "extra-rounded";
 
             if (cornerStyle === 'extra-rounded') cornersSquareType = "extra-rounded";
             else if (cornerStyle === 'rounded') cornersSquareType = "dot";
@@ -605,51 +380,25 @@
             if (cornerStyle === 'extra-rounded' || cornerStyle === 'rounded') cornersDotType = "dot";
 
             qrCodeInstance.update({
-                backgroundOptions: { color: bgColor },
                 dotsOptions: {
                     color: dotColor,
                     type: dotsType,
-                    gradient: dotStyle === 'heart' ? {
-                        type: "linear",
-                        rotation: 45,
-                        colorStops: [{ offset: 0, color: dotColor }, { offset: 1, color: "#ff4d6d" }]
-                    } : null
+                    gradient: dotStyle === 'heart' ? { type: "linear", rotation: 45, colorStops: [{ offset: 0, color: dotColor }, { offset: 1, color: "#ff4d6d" }] } : null
                 },
-                cornersSquareOptions: {
-                    color: dotColor,
-                    type: cornersSquareType
-                },
-                cornersDotOptions: {
-                    color: dotColor,
-                    type: cornersDotType
-                }
+                cornersSquareOptions: { color: dotColor, type: cornersSquareType },
+                cornersDotOptions: { color: dotColor, type: cornersDotType }
             });
-
             qrCodeInstance.append(qrContainer);
         }
 
-        function copyGeneratedLink() {
-            const copyText = document.getElementById("generatedLinkInput");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
-            alert("Copied live website URL: " + copyText.value);
+        function copyGeneratedLink() { 
+            const targetInput = document.getElementById("generatedLinkInput");
+            targetInput.select();
+            navigator.clipboard.writeText(targetInput.value); 
+            alert("Copied live Vercel URL!"); 
         }
-
-        function downloadQRImage() {
-            if (qrCodeInstance) {
-                qrCodeInstance.download({ name: "custom-studio-qr", extension: "png" });
-            } else {
-                alert("QR ကုဒ် မတည်ဆောက်ရသေးပါဗျာ။");
-            }
-        }
-
-        function closeQRModal() {
-            document.getElementById("qrModalContent").classList.replace("scale-100", "scale-95");
-            setTimeout(() => {
-                document.getElementById("qrModal").classList.add("hidden");
-            }, 150);
-        }
+        function downloadQRImage() { qrCodeInstance.download({ name: "studio-qr", extension: "png" }); }
+        function closeQRModal() { document.getElementById("qrModal").classList.add("hidden"); }
     </script>
 </body>
 </html>
