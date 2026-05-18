@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Ei Ei Phyu 🤍</title>
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #c084fc;
+            --gold: linear-gradient(to right, #fbf5b7, #aa771c);
+            --bg: #050505;
+            --ink: #ff758f; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, #1a0b2e 0%, #000 100%);
+            z-index: -1;
+        }
+
+        #overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+            transition: 1.5s;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--primary);
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Stage 1: Card Design Fixed */
+        #stage-1 {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            transition: opacity 2s ease;
+            padding: 15px;
+        }
+
+        .content-card {
+            width: 100%;
+            max-width: 310px; /* ဖုန်း Frame အတွင်း ကွက်တိဖြစ်စေရန် */
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            padding: 20px 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        /* ဓာတ်ပုံများ တစ်ခုပေါ်တစ်ခု ထပ်မနေစေရန် Grid စနစ်ပြောင်းလဲခြင်း */
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px 10px;
+            margin-bottom: 25px;
+            justify-items: center;
+        }
+
+        /* တတိယမြောက်ပုံကို အလယ်ဗဟိုမှာ တစ်ပုံတည်းကျန်အောင် ညှိခြင်း */
+        .image-circle:nth-child(3) {
+            grid-column: span 2;
+        }
+
+        .image-circle {
+            width: 100px; 
+            height: 100px;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .image-circle img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 0 15px var(--secondary);
+        }
+
+        .image-circle.visible { opacity: 1; transform: scale(1); }
+
+        .ribbon {
+            position: absolute;
+            bottom: -10px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: #2c1e02;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: bold; font-size: 0.6rem;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .meter-container {
+            width: 90%; height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin: 15px auto;
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: width 4s ease-in-out;
+        }
+
+        .name-tag {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(to bottom, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transition: 2s;
+            margin-top: 5px;
+        }
+
+        /* Stage 2: Envelope */
+        #stage-2 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transition: 2.5s;
+            position: absolute;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .float-anim { animation: floating 4s ease-in-out infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+
+        #envelope-wrapper {
+            position: relative;
+            width: 280px; height: 180px;
+            background: #f8bbd0;
+            cursor: pointer;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+            border-radius: 4px;
+            transition: background 1.2s;
+            max-width: 100%;
+        }
+
+        #envelope-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 90px solid #f06292;
+            z-index: 10;
+            transition: 1s ease;
+            transform-origin: top;
+        }
+
+        #envelope-wrapper.open::before { transform: rotateX(180deg); z-index: 0; }
+        #envelope-wrapper.read { background: transparent; box-shadow: none; }
+        #envelope-wrapper.read::before { opacity: 0; pointer-events: none; }
+
+        #letter {
+            position: absolute;
+            top: 10px; left: 10px;
+            width: 260px; height: 160px;
+            background: linear-gradient(135deg, #fff5f7 0%, #fdf5e6 100%);
+            background-image: radial-gradient(#ffb6c1 0.5px, transparent 0.5px);
+            background-size: 15px 15px;
+            padding: 20px;
+            z-index: 5;
+            transition: 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--ink); 
+            border-radius: 15px;
+            box-shadow: inset 0 0 40px rgba(255, 182, 193, 0.2);
+            border: 1px solid rgba(255, 182, 193, 0.3);
+        }
+
+        #envelope-wrapper.read #letter {
+            transform: translateY(-60px) scale(1.05);
+            height: auto;
+            min-height: 360px;
+            z-index: 20;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            width: 90vw;
+            max-width: 300px;
+            left: 50%;
+            margin-left: -150px;
+        }
+
+        #typewriter-text { font-size: 0.85rem; line-height: 1.7; white-space: pre-wrap; font-weight: 500; }
+
+        /* Stage 3: Question Page */
+        #stage-3 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: 2s;
+            text-align: center;
+            z-index: 100;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .question-box {
+            width: 100%;
+            max-width: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 30px 15px;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .question-text { font-size: 1.2rem; margin-bottom: 25px; color: white; }
+
+        .btn-group {
+            display: flex; gap: 15px;
+            position: relative;
+            justify-content: center;
+            height: 45px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        #yes-btn { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4); }
+        #no-btn { background: #eee; color: #666; position: absolute; }
+
+        #hint { 
+            margin-top: 30px; 
+            color: var(--primary); 
+            font-style: italic;
+            animation: pulse-hint 2.5s infinite;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        @keyframes pulse-hint { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+        .heart-float { position: absolute; pointer-events: none; animation: moveUp 6s linear forwards; z-index: 50; }
+        @keyframes moveUp { 0% { transform: translateY(0) scale(1); opacity: 0; } 15% { opacity: 0.8; } 100% { transform: translateY(-120vh) scale(1.8); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div id="overlay" onclick="start()">မင်းအတွက် ကိုယ်Supriseတစ်ခုလုပ်ပေးထားတယ် သိချင်ရင်နှိပ်ကြည့်လိုက်နော် </div>
+    <div class="stars"></div>
+
+    <div id="stage-1">
+        <div class="content-card">
+            <div class="images-grid">
+                <div class="image-circle" id="c1"><img src="three.jpg"><div class="ribbon">Your Beauty ✨</div></div>
+                <div class="image-circle" id="c2"><img src="two.jpg"><div class="ribbon">Your Kindness 💖</div></div>
+                <div class="image-circle" id="c3"><img src="one.jpg"><div class="ribbon">My Everything 💋</div></div>
+            </div>
+            <div class="meter-container"><div class="meter-fill" id="bar"></div></div>
+            <h1 class="name-tag" id="name">Yadanar Nwe</h1>
+        </div>
+    </div>
+
+    <div id="stage-2">
+        <div id="envelope-wrapper" class="float-anim">
+            <div id="letter">
+                <div id="typewriter-text"></div>
+            </div>
+        </div>
+        <div id="hint">ကိုယ့်နှလုံးသားလေးကို ဖွင့်ကြည့်ပါဦး</div>
+    </div>
+
+    <div id="stage-3">
+        <div class="question-box">
+            <p class="question-text" id="q-text">ကို့အချစ်ကို လက်ခံနိုင်မလားဟင်? ❤️</p>
+            <div class="btn-group">
+                <button class="btn" id="yes-btn" onclick="sayYes()">Yes</button>
+                <button class="btn" id="no-btn" onmouseover="moveNo()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="music" loop><source src="music.mp3"></audio>
+
+    <script>
+        const templateManifest = {
+            type: 'REGISTER_MANIFEST',
+            schema: [
+                { id: 'overlayText', type: 'textarea', label: 'စဖွင့်ချင်း ပေါ်မည့်စာသား', icon: 'fa-solid fa-comment-dots', rows: 2, defaultValue: 'မင်းအတွက် ကိုယ်Supriseတစ်ခုလုပ်ပေးထားတယ် သိချင်ရင်နှိပ်ကြည့်လိုက်နော်' },
+                { id: 'nameTag', type: 'text', label: 'ချစ်သူ/Crush ၏ အမည်', icon: 'fa-solid fa-heart', defaultValue: 'Yadanar Nwe' },
+                { id: 'ribbon1', type: 'text', label: 'ဓာတ်ပုံ ၁ စာသား (Beauty)', icon: 'fa-solid fa-bookmark', defaultValue: 'Your Beauty ✨' },
+                { id: 'ribbon2', type: 'text', label: 'ဓာတ်ပုံ ၁ စာသား (Kindness)', icon: 'fa-solid fa-bookmark', defaultValue: 'Your Kindness 💖' },
+                { id: 'ribbon3', type: 'text', label: 'ဓာတ်ပုံ ၃ စာသား (Everything)', icon: 'fa-solid fa-bookmark', defaultValue: 'My Everything 💋' },
+                { id: 'letterText', type: 'textarea', label: 'စာအိတ်ထဲက စာသား (Typewriter)', icon: 'fa-solid fa-envelope-open-text', rows: 5, defaultValue: "မင်းကိုသဘောကျနေတာ ခနတာစိတ်လှုပ်ရှားမှုမဟုတ်ဘူး\nအချိန်တွေဘယ်လောက်ကြာကြာ ကို့အတွေးထဲ မင်းကနေရာယူထားတာ\nလူအများကြားထဲရပ်နေရင်းတောင် ကိုယ်ရှာမိတဲ့မျက်လုံးတစ်စုံက မင်းပဲဖြစ်မယ်\nတစ်နေ့နေ့မှာ မင်းဘေးနားရပ်ပြီး ကို့ရဲ့ ရွေးချယ်မှုက မင်းပဲလို့ရိုးရိုးလေးပြောချင်တယ်" },
+                { id: 'questionText', type: 'text', label: 'မေးခွန်းစာသား (Stage 3)', icon: 'fa-solid fa-circle-question', defaultValue: 'ကို့အချစ်ကို လက်ခံနိုင်မလားဟင်? ❤️' },
+                { id: 'successText', type: 'textarea', label: 'Yes နှိပ်ပြီးရင် ပေါ်မည့်စာသား', icon: 'fa-solid fa-face-smile-wink', rows: 2, defaultValue: 'ကိုလဲ မင်းကိုထာ၀ရချစ်ပါတယ်❤️❤️<br><br>ဒီထက်ပိုပြီး မြတ်နိုးသွားပါဦးမယ်...' },
+                { id: 'img1', type: 'image', label: 'ဓာတ်ပုံ ၁ (three.jpg)', icon: 'fa-solid fa-image' },
+                { id: 'img2', type: 'image', label: 'ဓာတ်ပုံ ၂ (two.jpg)', icon: 'fa-solid fa-image' },
+                { id: 'img3', type: 'image', label: 'ဓာတ်ပုံ ၃ (one.jpg)', icon: 'fa-solid fa-image' }
+            ]
+        };
+
+        window.parent.postMessage(templateManifest, '*');
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => window.parent.postMessage(templateManifest, '*'), 400);
+        });
+
+        let textToType = "မင်းကိုသဘောကျနေတာ ခနတာစိတ်လှုပ်ရှားမှုမဟုတ်ဘူး\nအချိန်တွေဘယ်လောက်ကြာကြာ ကို့အတွေးထဲ မင်းကနေရာယူထားတာ\nလူအများကြားထဲရပ်နေရင်းတောင် ကိုယ်ရှာမိတဲ့မျက်လုံးတစ်စုံက မင်းပဲဖြစ်မယ်\nတစ်နေ့နေ့မှာ မင်းဘေးနားရပ်ပြီး ကို့ရဲ့ ရွေးချယ်မှုက မင်းပဲလို့ရိုးရိုးလေးပြောချင်တယ်";
+        let successResponseText = "ကိုလဲ မင်းကိုထာ၀ရချစ်ပါတယ်❤️❤️<br><br>ဒီထက်ပိုပြီး မြတ်နိုးသွားပါဦးမယ်...";
+
+        function start() {
+            document.getElementById('overlay').style.opacity = '0';
+            setTimeout(() => document.getElementById('overlay').style.display = 'none', 1500);
+            
+            try { document.getElementById('music').play(); } catch(e) { console.log("Audio play delayed"); }
+
+            setTimeout(() => document.getElementById('c1').classList.add('visible'), 800);
+            setTimeout(() => document.getElementById('c2').classList.add('visible'), 2500);
+            setTimeout(() => document.getElementById('c3').classList.add('visible'), 4200);
+            
+            setTimeout(() => {
+                document.getElementById('bar').style.width = '100%';
+                setTimeout(() => {
+                    document.getElementById('name').style.opacity = '1';
+                    startSlowHearts();
+                    setTimeout(() => {
+                        document.getElementById('stage-1').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('stage-1').style.display = 'none';
+                            const s2 = document.getElementById('stage-2');
+                            s2.style.display = 'flex';
+                            setTimeout(() => s2.style.opacity = '1', 100);
+                        }, 2000);
+                    }, 6500);
+                }, 4000);
+            }, 5500);
+        }
+
+        function startSlowHearts() { setInterval(createHeart, 500); }
+
+        function createHeart() {
+            const h = document.createElement('div');
+            h.className = 'heart-float';
+            h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + "vw";
+            h.style.bottom = "-10vh";
+            h.style.fontSize = (Math.random() * 20 + 20) + "px";
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 6000);
+        }
+
+        document.getElementById('envelope-wrapper').addEventListener('click', function() {
+            if (!this.classList.contains('open')) {
+                this.classList.remove('float-anim');
+                this.classList.add('open');
+                document.getElementById('hint').style.display = 'none';
+                
+                setTimeout(() => {
+                    this.classList.add('read');
+                    setTimeout(() => typeWriter(textToType, document.getElementById('typewriter-text')), 1200);
+                }, 1200);
+            }
+        });
+
+        function typeWriter(text, element) {
+            let i = 0;
+            element.textContent = ""; 
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, 120 + (Math.random() * 60)); 
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('stage-2').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('stage-2').style.display = 'none';
+                            const s3 = document.getElementById('stage-3');
+                            s3.style.display = 'flex';
+                            setTimeout(() => s3.style.opacity = '1', 100);
+                        }, 2000);
+                    }, 3000);
+                }
+            }
+            type();
+        }
+
+        function moveNo() {
+            const noBtn = document.getElementById('no-btn');
+            const x = Math.random() * 160 - 80;
+            const y = Math.random() * 80 - 40;
+            noBtn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        function sayYes() {
+            document.getElementById('q-text').innerHTML = successResponseText;
+            document.getElementById('yes-btn').style.display = 'none';
+            document.getElementById('no-btn').style.display = 'none';
+            for(let i=0; i<30; i++) setTimeout(createHeart, i*150);
+        }
+
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'UPDATE_DATA') {
+                const data = event.data.payload;
+
+                if (data.overlayText && document.getElementById('overlay')) {
+                    document.getElementById('overlay').innerText = data.overlayText;
+                }
+                if (data.nameTag && document.getElementById('name')) {
+                    document.getElementById('name').innerText = data.nameTag;
+                }
+                if (data.ribbon1) document.querySelector('#c1 .ribbon').innerText = data.ribbon1;
+                if (data.ribbon2) document.querySelector('#c2 .ribbon').innerText = data.ribbon2;
+                if (data.ribbon3) document.querySelector('#c3 .ribbon').innerText = data.ribbon3;
+                
+                if (data.letterText) {
+                    textToType = data.letterText;
+                    const typeBox = document.getElementById('typewriter-text');
+                    if (typeBox && typeBox.innerText !== "") {
+                        typeBox.innerText = data.letterText;
+                    }
+                }
+                if (data.questionText && document.getElementById('q-text')) {
+                    document.getElementById('q-text').innerText = data.questionText;
+                }
+                if (data.successText) {
+                    successResponseText = data.successText;
+                }
+
+                if (data.img1) document.querySelector('#c1 img').src = data.img1;
+                if (data.img2) document.querySelector('#c2 img').src = data.img2;
+                if (data.img3) document.querySelector('#c3 img').src = data.img3;
+            }
+        });
+
+
+      // သက်ဆိုင်ရာ Template ဖိုင်များ (cv.html, blog.html စသည်) ထဲတွင် ထည့်ရန်ကုဒ်
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'REQUEST_SNAPSHOT') {
+        // လက်ရှိ ပြင်ဆင်ထားသမျှ HTML ကုဒ်တစ်ခုလုံးကို Main Window ထံ ပြန်လည်ပေးပို့ခြင်း Pipeline
+        window.parent.postMessage({
+            type: 'HTML_SNAPSHOT',
+            html: document.documentElement.outerHTML
+        }, '*');
+    }
+});
+    </script>
+</body>
+</html>
