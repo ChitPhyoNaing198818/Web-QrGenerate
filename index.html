@@ -439,27 +439,35 @@
 
         document.getElementById('previewIframe').addEventListener('load', dispatchDataToIframe);
 
-        function generateVercelNativeRouteLink() {
-            const deployBtn = document.getElementById('deployBtn');
-            const deployBtnText = document.getElementById('deployBtnText');
-            deployBtn.disabled = true; deployBtnText.innerText = "Generating live URL...";
+    function generateVercelNativeRouteLink() {
+    const deployBtn = document.getElementById('deployBtn');
+    const deployBtnText = document.getElementById('deployBtnText');
+    deployBtn.disabled = true; deployBtnText.innerText = "Generating live URL...";
 
-            try {
-                const currentOrigin = window.location.origin;
-                let targetedLiveUrl = `${currentOrigin}/${activeSelectedFile}`;
-                
-                if (Object.keys(stateDataStorage).length > 0) {
-                    const base64Payload = btoa(unescape(encodeURIComponent(JSON.stringify(stateDataStorage))));
-                    targetedLiveUrl += `?studio_payload=${base64Payload}`;
-                }
-
-                showQRModalStudio(targetedLiveUrl);
-            } catch (error) {
-                alert(" Link တည်ဆောက်မှု အဆင်မပြေဖြစ်သွားပါပြီ။ ထပ်မံကြိုးစားကြည့်ပေးပါဗျာ။");
-            } finally {
-                deployBtn.disabled = false; deployBtnText.innerText = "Website Link နှင့် QR ကုဒ် ရယူမည်";
+    try {
+        const currentOrigin = window.location.origin;
+        let targetedLiveUrl = `${currentOrigin}/${activeSelectedFile}`;
+        
+        if (Object.keys(stateDataStorage).length > 0) {
+            // 💡 မြန်မာစာလုံးနှင့် Emoji များအတွက် ၁၀၀ ရာခိုင်နှုန်း စိတ်ချရသော အသွင်ပြောင်းနည်းလမ်း
+            const jsonString = JSON.stringify(stateDataStorage);
+            const utf8Bytes = new TextEncoder().encode(jsonString);
+            let binaryString = "";
+            for (let i = 0; i < utf8Bytes.length; i++) {
+                binaryString += String.fromCharCode(utf8Bytes[i]);
             }
+            const base64Payload = btoa(binaryString);
+            targetedLiveUrl += `?studio_payload=${base64Payload}`;
         }
+
+        showQRModalStudio(targetedLiveUrl);
+    } catch (error) {
+        console.error("Link Generation Error:", error); // Console မှာ ဘာအမှားလဲဆိုတာ ကြည့်နိုင်ရန်
+        alert("Link တည်ဆောက်မှု အဆင်မပြေဖြစ်သွားပါပြီ။ ထပ်မံကြိုးစားကြည့်ပေးပါဗျာ။");
+    } finally {
+        deployBtn.disabled = false; deployBtnText.innerText = "Website Link နှင့် QR ကုဒ် ရယူမည်";
+    }
+}
 
         function showQRModalStudio(url) {
             document.getElementById("generatedLinkInput").value = url;

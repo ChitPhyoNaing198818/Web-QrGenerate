@@ -21,359 +21,312 @@
       --text: #590d22;
       --white: #fffdfc;
       --wax: #c1121f;
+      
+      /* Studio Dynamic Overrides */
+      --wax-icon: "❤";
+      --side-emoji: "🌸";
     }
 
     body {
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 100vw;
       height: 100vh;
-      background-color: var(--bg);
-      background-image: radial-gradient(circle at center, #ffffff 0%, var(--bg) 100%);
-      font-family: 'Inter', sans-serif;
       overflow: hidden;
-    }
-
-    #particles {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .particle {
-      position: absolute;
-      opacity: 0;
-      animation: float 5s infinite;
-      text-shadow: 0 0 10px rgba(255, 179, 198, 0.5);
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0) scale(0.5); opacity: 0; }
-      20% { opacity: 0.8; }
-      80% { opacity: 0.8; }
-      100% { transform: translateY(-120px) scale(1.2) rotate(20deg); opacity: 0; }
-    }
-
-    .scene {
-      position: relative;
-      z-index: 10;
+      background: var(--bg);
+      font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
+      perspective: 1000px;
+      transition: background 0.5s ease;
     }
 
+    /* Envelope Container */
     .envelope-wrapper {
       position: relative;
-      width: 350px;
-      height: 230px;
+      width: 280px;
+      height: 200px;
+      background: var(--envelope-back);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       cursor: pointer;
-      perspective: 1000px;
+      transform-style: preserve-3d;
+      transition: transform 0.5s ease, background 0.5s ease;
+      z-index: 10;
     }
 
-    .envelope {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      border-radius: 5px;
-      box-shadow: 0 15px 40px rgba(251, 111, 146, 0.2);
-      transition: transform 0.4s ease;
+    .envelope-wrapper.open {
+      transform: translateY(60px) rotateX(-5deg);
     }
 
-    .envelope-wrapper:hover .envelope {
-      transform: translateY(-8px);
-      box-shadow: 0 25px 45px rgba(251, 111, 146, 0.3);
-    }
-
-    .envelope-back {
+    /* Flaps & Sides */
+    .flap, .left-side, .right-side, .bottom-side {
       position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      z-index: 3;
+      transition: all 0.5s ease;
+    }
+
+    .flap {
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--envelope-back);
-      border-radius: 5px;
+      border-width: 100px 140px 0 140px;
+      border-color: var(--envelope-top) transparent transparent transparent;
+      transform-origin: top;
+      transform: rotateX(0deg);
+      z-index: 5;
+    }
+
+    .envelope-wrapper.open .flap {
+      transform: rotateX(180deg);
       z-index: 1;
     }
 
-    .letter {
-      position: absolute;
-      bottom: 0;
-      left: 5%;
-      width: 90%;
-      height: 90%;
-      background: 
-        radial-gradient(circle at top right, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at bottom left, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
-        linear-gradient(135deg, #fffdfc 0%, #ffe3ec 100%);
-      border: 1px solid rgba(255, 179, 198, 0.6);
-      border-radius: 8px 8px 2px 2px;
-      z-index: 3;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), height 0.6s, z-index 0s 0.3s;
-      padding: 35px 25px 25px 25px;
-      box-sizing: border-box;
-      text-align: center;
-      box-shadow: inset 0 0 45px rgba(255, 182, 193, 0.3), 0 5px 15px rgba(0,0,0,0.06); 
-      display: block;
-      overflow: hidden;
-    }
-
-    .envelope-front {
-      position: absolute;
+    .left-side {
       bottom: 0;
       left: 0;
-      width: 0;
-      height: 0;
-      border-left: 175px solid var(--envelope-left);
-      border-right: 175px solid var(--envelope-right);
-      border-bottom: 115px solid var(--envelope-bottom);
-      border-top: 115px solid transparent;
+      border-width: 100px 0 100px 140px;
+      border-color: transparent transparent transparent var(--envelope-left);
+    }
+
+    .right-side {
+      bottom: 0;
+      right: 0;
+      border-width: 100px 140px 100px 0;
+      border-color: transparent var(--envelope-right) transparent transparent;
+    }
+
+    .bottom-side {
+      bottom: 0;
+      left: 0;
+      border-width: 0 140px 100px 140px;
+      border-color: transparent transparent var(--envelope-bottom) transparent;
       z-index: 4;
-      pointer-events: none;
-      border-radius: 0 0 5px 5px;
     }
 
-    .envelope-flap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-top: 130px solid var(--envelope-top);
-      border-left: 175px solid transparent;
-      border-right: 175px solid transparent;
-      border-bottom: 100px solid transparent;
-      z-index: 5;
-      transform-origin: top;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0s;
-    }
-
+    /* Wax Seal */
     .wax-seal {
       position: absolute;
-      top: 130px;
-      left: 175px;
+      top: 100px;
+      left: 140px;
+      width: 44px;
+      height: 44px;
+      background: var(--wax);
+      border-radius: 50px;
       transform: translate(-50%, -50%);
-      width: 55px;
-      height: 55px;
-      background: radial-gradient(circle, #e63946 0%, var(--wax) 100%);
-      border-radius: 50%;
       z-index: 6;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.3), inset 0 -2px 4px rgba(0,0,0,0.2);
-      transition: all 0.4s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.5s ease, opacity 0.3s ease;
     }
 
     .wax-seal::after {
-      content: var(--wax-icon, '♥');
-      color: #780000;
-      font-size: 24px;
-      text-shadow: 0 1px 1px rgba(255,255,255,0.2);
+      content: var(--wax-icon);
+      color: #fff;
+      font-size: 20px;
     }
 
-    .letter::before {
-      content: '';
+    .envelope-wrapper.open .wax-seal {
+      transform: translate(-50%, -150px) scale(0);
+      opacity: 0;
+    }
+
+    /* Seal Hint Label */
+    #love-seal {
+      position: absolute;
+      top: 130px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Caveat', cursive;
+      font-size: 18px;
+      color: var(--white);
+      z-index: 6;
+      white-space: nowrap;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .envelope-wrapper.open #love-seal {
+      opacity: 0;
+    }
+
+    /* Inner Card */
+    .letter-card {
       position: absolute;
       top: 10px;
       left: 10px;
-      right: 10px;
-      bottom: 10px;
-      border: 1px solid #ffb3c6;
+      width: 260px;
+      height: 180px;
+      background: var(--white);
       border-radius: 4px;
-      pointer-events: none;
-      opacity: 0.8;
+      z-index: 2;
+      box-sizing: border-box;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.5s ease, height 0.5s ease, top 0.5s ease;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
-    .letter::after {
-      content: '';
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      right: 15px;
-      bottom: 15px;
-      border: 1px dashed #ffb3c6;
-      border-radius: 2px;
-      pointer-events: none;
-      opacity: 0.5;
+    .envelope-wrapper.open .letter-card {
+      transform: translateY(-160px);
+      height: 320px;
+      top: 0;
+      z-index: 4;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.08);
     }
 
-    .letter-title {
-      position: relative;
+    #love-title {
       font-family: 'Dancing Script', cursive;
-      font-size: 2.8rem;
+      font-size: 24px;
       color: var(--text);
-      margin: 0;
-      text-shadow: 1px 1px 2px rgba(193, 18, 31, 0.15); 
-      display: inline-block;
-      padding-bottom: 5px;
-      border-bottom: 1px solid rgba(255, 179, 198, 0.7);
+      margin: 0 0 10px 0;
+      transition: color 0.5s ease;
     }
 
-    .letter-title::after {
-      content: '❤';
-      position: absolute;
-      bottom: -13px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1rem;
-      color: #ffb3c6;
-      background: #fffdfc;
-      padding: 0 5px;
+    /* Message content */
+    .message-container {
+      width: 100%;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 5px;
+      box-sizing: border-box;
     }
 
-    .letter-text {
-      font-family: 'Noto Sans Myanmar', 'Caveat', sans-serif;
-      font-size: 1.1rem;
+    #typewriter-text {
+      font-size: 15px;
       color: var(--text);
       line-height: 1.6;
-      margin: 15px 0 0 0;
-      text-align: left;
-      white-space: pre-wrap; 
-      word-break: break-word;
-      overflow-wrap: break-word;
-      max-height: 220px;
-      min-height: 120px; 
-      position: relative;
-      z-index: 10;
-      overflow-y: auto;
-      padding: 0 10px;
+      margin: 0;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
     }
 
-    .letter-text::-webkit-scrollbar { width: 4px; }
-    .letter-text::-webkit-scrollbar-track { background: transparent; }
-    .letter-text::-webkit-scrollbar-thumb { background: rgba(255, 179, 198, 0.8); border-radius: 4px; }
-
-    .letter-seal {
-      margin-top: 20px;
-      font-size: 1.4rem;
-      color: var(--wax);
-      font-family: 'Dancing Script', cursive;
-      text-align: right;
-      opacity: 0; 
-      transition: opacity 1s ease;
-      position: relative;
-      z-index: 10;
-    }
-
-    .letter-seal.visible { opacity: 1; }
-
-    .envelope-wrapper.open .envelope-flap {
-      transform: rotateX(180deg);
-      z-index: 2;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.3s;
-    }
-
-    .envelope-wrapper.open .wax-seal { opacity: 0; transform: translate(-50%, 0) scale(0); }
-
-    .envelope-wrapper.open .letter {
-      transform: translateY(-90px);
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s, z-index 0s;
-    }
-
-    .envelope-wrapper.read .letter {
-      height: 460px;
-      transform: translateY(-30px) scale(1.05);
-      z-index: 100;
-      box-shadow: 0 20px 60px rgba(251, 111, 146, 0.3), 0 5px 20px rgba(0,0,0,0.15);
-      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), height 0.6s, z-index 0s;
-      cursor: auto;
-    }
-
-    .hint {
+    /* Outer Hints text */
+    #hints {
       position: absolute;
-      bottom: -45px;
+      bottom: -50px;
+      left: 0;
       width: 100%;
       text-align: center;
-      color: var(--envelope-bottom);
-      font-size: 0.95rem;
-      font-weight: 500;
-      opacity: 0.8;
-      pointer-events: none;
-      animation: pulse 2s infinite;
-      transition: opacity 0.3s;
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+      color: var(--text);
+      transition: color 0.5s ease, opacity 0.3s ease;
+    }
+    .envelope-wrapper.open #hints {
+      opacity: 0;
     }
 
-    @keyframes pulse {
-      0% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.02); }
-      100% { opacity: 0.6; transform: scale(1); }
-    }
-
-    .scene::after {
-      content: var(--side-emoji, '🌹');
+    /* Floating Side Decor elements */
+    .side-decor {
       position: absolute;
-      bottom: -30px;
-      right: -80px;
-      font-size: 8rem;
-      filter: drop-shadow(4px 15px 15px rgba(251, 111, 146, 0.3));
-      z-index: 11;
+      font-size: 24px;
       pointer-events: none;
-      transform: rotate(15deg);
-      transform-origin: bottom center;
-      animation: sway 6s ease-in-out infinite;
+      animation: gentle-bounce 3s infinite ease-in-out;
+      opacity: 0.7;
+    }
+    .side-decor.left { left: 40px; top: 30%; animation-delay: 0s; }
+    .side-decor.right { right: 40px; top: 40%; animation-delay: 1.5s; }
+    .side-decor::before { content: var(--side-emoji); }
+
+    @keyframes gentle-bounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
     }
 
-    @keyframes sway {
-      0% { transform: rotate(15deg); }
-      50% { transform: rotate(22deg); }
-      100% { transform: rotate(15deg); }
+    /* Floating particles background animation */
+    .particle {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      user-select: none;
     }
 
-    @media screen and (max-width: 600px), screen and (max-height: 650px) { .scene { transform: scale(0.85); } }
-    @media screen and (max-width: 500px), screen and (max-height: 550px) { .scene { transform: scale(0.75); } }
-    @media screen and (max-width: 400px), screen and (max-height: 480px) { .scene { transform: scale(0.65); } }
-    @media screen and (max-width: 320px), screen and (max-height: 400px) { .scene { transform: scale(0.55); } }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-100vh) rotate(360deg) scale(0.5); opacity: 0; }
+    }
+
+    /* Decorative music controls button */
+    .audio-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      background: var(--white);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      z-index: 100;
+      font-size: 14px;
+      color: var(--text);
+    }
   </style>
 </head>
 
 <body>
+
+  <div class="side-decor left"></div>
+  <div class="side-decor right"></div>
+
+  <div class="envelope-wrapper" id="envelope" onclick="openEnvelope(event)">
+    <div class="flap"></div>
+    <div class="left-side"></div>
+    <div class="right-side"></div>
+    <div class="bottom-side"></div>
+    <div class="wax-seal"></div>
+    <div id="love-seal">Tap to open</div>
+
+    <div class="letter-card">
+      <h1 id="love-title">My Dearest</h1>
+      <div class="message-container">
+         <p id="typewriter-text"></p>
+      </div>
+    </div>
+
+    <div id="hints">You have a sweet message waiting inside</div>
+  </div>
+
+  <button class="audio-btn" id="audioBtn" onclick="toggleAudio(event)">🎵</button>
+  
   <audio id="bg-music" loop>
     <source id="music-src" src="music.mp3" type="audio/mpeg">
   </audio>
 
-  <div id="particles"></div>
-  <div class="scene">
-    <div class="envelope-wrapper" id="envelope-wrapper">
-      <div class="envelope">
-        <div class="envelope-back"></div>
-
-        <div class="letter" id="letter">
-          <h1 class="letter-title" id="love-title">Ma Ma</h1>
-          <div class="letter-text" id="typewriter-text"></div>
-          <div class="letter-seal" id="love-seal">Forever Ma Ma ❤</div>
-        </div>
-
-        <div class="envelope-front"></div>
-        <div class="envelope-flap"></div>
-        <div class="wax-seal"></div>
-      </div>
-      <div class="hint" id="hints">ကျွန်တော့်ရင်ထဲကစကားလေးတွေကိုနားထောင်ပေးပါ</div>
-    </div>
-  </div>
-
   <script>
-    // ⚙️ DYNAMIC CORE ENGINE INTERFACE (EXPANDED OPTION DESIGNS)
+    // Studio Manifest Declaration Schema
     const studioManifest = [
-      { id: 'hints', type:'text', label: 'Intro Help text', defaultValue:'ကျွန်တော့်ရင်ထဲကစကားလေးတွေကိုနားထောင်ပေးပါ', icon: 'fa-solid fa-comment-dots' },
-      { id: 'title', type: 'text', label: 'ချစ်ရသူအမည် (Header)', defaultValue: 'Ma Ma', icon: 'fa-solid fa-user-heart' },
-      { id: 'message', type: 'textarea', label: 'ရင်ဖွင့်လွှာ စာသားများ', defaultValue: "မမကိုချစ်တယ်ဆိုတာထက် မြတ်နိုးတာပါမမရယ်\nတကယ်တော့ကျွန်တော်က မ့ထက်အသက်ငယ်ပေမယ့် မမအတွက်ဆိုရင်ရည်မှန်းချက်တွေနဲ့ပြည့်နှက်နေတာပါ\nကျွန်တော်ချစ်ရတဲ့မကို တစ်ရက်လောက်စောပြီးတွေ့ခွင့်ရရင် အရမ်းကောင်းမှာပဲမရယ်\nတကယ်တော့ကျွန်တော်က မကိုဘယ်သူနဲ့မှယှခဲ့တာမဟုတ်ပါဘူး\nမမက ကျွန်တော့်အတွက်အကောင်းဆုံးနဲ့အဖိုးတန်ဆုံးပါ\nအဲ့ဒါကြောင့်မမကို ကျွန်တော့်ဘက်ကိုစိတ်ယိုင်ပေးပါလားမမရယ်", icon: 'fa-solid fa-envelope-open-text' },
-      { id: 'sealText', type: 'text', label: 'အဆုံးသတ်လက်မှတ်', defaultValue: 'Forever Ma Ma ❤', icon: 'fa-solid fa-signature' },
+      { id: 'title', label: 'စာအိတ်တွင်း ခေါင်းစဉ်', type: 'text', defaultValue: 'My Dearest' },
+      { id: 'message', label: 'ရင်ဖွင့်လွှာ စာသားများ', type: 'textarea', defaultValue: 'ဒီကမ္ဘာမှာ မင်းကို အချစ်ဆုံးပဲ။ မင်းနဲ့ ဆုံတွေ့ခွင့်ရတာ ငါ့ဘဝရဲ့ အကောင်းဆုံး ကံကောင်းခြင်းတစ်ခုပါ။ 💖' },
+      { id: 'sealText', label: 'တံဆိပ်ခတ်နှိပ်စာသား', type: 'text', defaultValue: 'Tap to open' },
+      { id: 'hints', label: 'စာအိတ်အောက် ညွှန်ကြားစာ', type: 'text', defaultValue: 'You have a sweet message waiting inside' },
       
-      // New Core Customization Injectors
-      { id: 'colorBg', type: 'color', label: 'Background Color (နောက်ခံအရောင်)', defaultValue: '#fff0f3', icon: 'fa-solid fa-palette' },
-      { id: 'colorText', type: 'color', label: 'Letter Text Color (စာသားအရောင်)', defaultValue: '#590d22', icon: 'fa-solid fa-font' },
-      { id: 'colorEnvelope', type: 'color', label: 'Envelope Base Color (စာအိတ်အရောင်)', defaultValue: '#ff8fab', icon: 'fa-solid fa-envelope' },
-      { id: 'colorFlap', type: 'color', label: 'Envelope Flap Color (စာအိတ်အဖုံးအရောင်)', defaultValue: '#ff758f', icon: 'fa-solid fa-folder-open' },
-      { id: 'waxIcon', type: 'text', label: 'Wax Seal Center Icon / Emoji', defaultValue: '♥', icon: 'fa-solid fa-stamp' },
-      { id: 'sideEmoji', type: 'text', label: 'Corner Floating Giant Emoji', defaultValue: '🌹', icon: 'fa-solid fa-icons' },
+      { id: 'colorBg', label: 'နောက်ခံ Background အရောင်', type: 'color', defaultValue: '#fff0f3' },
+      { id: 'colorText', label: 'စာသား စာလုံးအရောင်', type: 'color', defaultValue: '#590d22' },
+      { id: 'colorEnvelope', label: 'စာအိတ် ကိုယ်ထည်အရောင်', type: 'color', defaultValue: '#ff8fab' },
+      { id: 'colorFlap', label: 'စာအိတ် အဖုံးအရောင်', type: 'color', defaultValue: '#ff758f' },
       
-      { id: 'bgMusic', type: 'audio', label: 'နောက်ခံတေးဂီတ (MP3)', defaultValue: 'music.mp3', icon: 'fa-solid fa-music' }
+      { id: 'waxIcon', label: 'တံဆိပ်တုံး Icon (Emoji)', type: 'text', defaultValue: '❤' },
+      { id: 'sideEmoji', label: 'ဘေးဘက် အလှဆင် (Emoji)', type: 'text', defaultValue: '🌸' },
+      { id: 'bgMusic', label: 'နောက်ခံ တေးဂီတ လင့်ခ် (URL)', type: 'text', defaultValue: 'music.mp3' }
     ];
 
     let dynamicState = {};
@@ -392,6 +345,12 @@
       if (dynamicState.hints) document.getElementById('hints').innerText = dynamicState.hints;
       if (dynamicState.title) document.getElementById('love-title').innerText = dynamicState.title;
       if (dynamicState.sealText) document.getElementById('love-seal').innerText = dynamicState.sealText;
+      
+      // 💡 Live Studio မှာ စာရိုက်နေစဉ် Typewriter Area ထဲမှာ တစ်ခါတည်း လိုက်ပြောင်းပေးနိုင်ရန်
+      const typewriterArea = document.getElementById('typewriter-text');
+      if (typewriterArea && dynamicState.message) {
+        typewriterArea.textContent = dynamicState.message;
+      }
       
       // Inject CSS Custom Properties for Theme Colors dynamically
       const root = document.documentElement;
@@ -424,94 +383,98 @@
       }
     }
 
+    // 💡 URL Params ကို TextDecoder သုံးပြီး မြန်မာစာလုံးမပျက်ဘဲ ဖတ်ယူသည့်အပိုင်း
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('studio_payload')) {
       try {
-        const decoded = JSON.parse(decodeURIComponent(escape(atob(urlParams.get('studio_payload')))));
+        const base64 = urlParams.get('studio_payload');
+        const binaryString = atob(base64);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        const decodedString = new TextDecoder().decode(bytes);
+        const decoded = JSON.parse(decodedString);
         applyStateUpdate(decoded);
-      } catch(e) { console.error("Payload decoding failed", e); }
+      } catch(e) { 
+        console.error("Payload decoding failed", e); 
+      }
     }
 
-    window.addEventListener('message', function(event) {
-      if (!event.data) return;
-      if (event.data.type === 'UPDATE_DATA') {
-        applyStateUpdate(event.data.payload);
-      }
-      if (event.data.type === 'REQUEST_SNAPSHOT') {
-        window.parent.postMessage({ type: 'HTML_SNAPSHOT', html: document.documentElement.outerHTML }, '*');
+    // Studio PostMessage Listeners
+    window.addEventListener('message', (e) => {
+      if(e.data && e.data.type === 'UPDATE_STATE') {
+        applyStateUpdate(e.data.payload);
       }
     });
 
-    // 💌 LETTER INTERACTION CODE
-    document.addEventListener("DOMContentLoaded", () => {
-      const envelopeWrapper = document.getElementById('envelope-wrapper');
-      const hintsLabel = document.getElementById('hints');
-      const bgMusic = document.getElementById('bg-music');
+    // Core Interaction Logics
+    let isOpened = false;
+    let isMusicPlaying = false;
 
-      let isOpen = false;
-      let isRead = false;
-      let isTyping = false;
-      let hasTyped = false;
+    function openEnvelope(e) {
+      if(isOpened) return;
+      isOpened = true;
+      
+      const env = document.getElementById('envelope');
+      env.classList.add('open');
+      
+      // Start Music on click if allowed
+      startAudio();
 
-      envelopeWrapper.addEventListener('click', (e) => {
-        if (!isOpen) {
-          if (bgMusic && bgMusic.paused) {
-            bgMusic.play().catch(err => console.log("Audio play failed:", err));
-          }
+      // Trigger Animations
+      setTimeout(() => {
+        typeWriterEffect();
+        createParticles();
+      }, 600);
+    }
 
-          envelopeWrapper.classList.add('open');
-          isOpen = true;
-          hintsLabel.style.opacity = '0';
-          spawnPopHearts(e.clientX, e.clientY);
+    function typeWriterEffect() {
+      const text = dynamicState.message || '';
+      const container = document.getElementById('typewriter-text');
+      container.textContent = ''; // clear first
+      let index = 0;
 
-          setTimeout(() => {
-            if (isOpen) {
-              envelopeWrapper.classList.add('read');
-              isRead = true;
-
-              if (!hasTyped && !isTyping) {
-                isTyping = true;
-                setTimeout(() => typeWriterEffect(dynamicState.message, document.getElementById('typewriter-text')), 600);
-              }
-            }
-          }, 600);
-        } else if (isRead) {
-          envelopeWrapper.classList.remove('read');
-          envelopeWrapper.classList.remove('open');
-          isOpen = false;
-          isRead = false;
-          hintsLabel.style.opacity = '1';
+      function type() {
+        if (index < text.length) {
+          container.textContent += text.charAt(index);
+          index++;
+          setTimeout(type, 60);
         }
-      });
-
-      function typeWriterEffect(text, element, speed = 60) {
-        let i = 0;
-        element.textContent = '';
-        function type() {
-          if (i < text.length) {
-            element.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, speed + (Math.random() * 40 - 20));
-          } else {
-            isTyping = false;
-            hasTyped = true;
-            document.getElementById('love-seal').classList.add('visible');
-          }
-        }
-        type();
       }
+      type();
+    }
 
-      createBackgroundParticles();
-    });
+    function startAudio() {
+      const audio = document.getElementById('bg-music');
+      audio.play().then(() => {
+        isMusicPlaying = true;
+        document.getElementById('audioBtn').innerText = '⏸';
+      }).catch(err => console.log("Audio autoplay protected:", err));
+    }
 
-    function createBackgroundParticles() {
-      const container = document.getElementById('particles');
-      const symbols = ['❤', '✨', '⭐', '💖'];
-      for (let i = 0; i < 25; i++) {
+    function toggleAudio(e) {
+      e.stopPropagation(); // Prevent envelope from triggering click
+      const audio = document.getElementById('bg-music');
+      if(isMusicPlaying) {
+        audio.pause();
+        document.getElementById('audioBtn').innerText = '🎵';
+      } else {
+        audio.play();
+        document.getElementById('audioBtn').innerText = '⏸';
+      }
+      isMusicPlaying = !isMusicPlaying;
+    }
+
+    function createParticles() {
+      const container = document.body;
+      const emoji = dynamicState.sideEmoji || '🌸';
+      
+      for (let i = 0; i < 20; i++) {
         setTimeout(() => {
           const particle = document.createElement('div');
           particle.className = 'particle';
-          particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+          particle.innerHTML = emoji;
           particle.style.left = Math.random() * 100 + 'vw';
           particle.style.top = Math.random() * 100 + 'vh';
           particle.style.fontSize = Math.random() * 18 + 12 + 'px';
@@ -522,6 +485,13 @@
         }, i * 250);
       }
     }
+
+    // Touch support effect trigger
+    document.body.addEventListener('click', (e) => {
+       if(isOpened) {
+          spawnPopHearts(e.clientX, e.clientY);
+       }
+    });
 
     function spawnPopHearts(x, y) {
       for (let i = 0; i < 8; i++) {
@@ -540,12 +510,14 @@
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * 80 + 40;
-            heart.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance - 50}px) scale(0)`;
+            const velocity = Math.random() * 80 + 40;
+            const tx = Math.cos(angle) * velocity;
+            const ty = Math.sin(angle) * velocity - 30; // Float slightly upward
+            heart.style.transform = `translate(${tx}px, ${ty}px) scale(0)`;
             heart.style.opacity = '0';
           });
         });
-        setTimeout(() => heart.remove(), 1000);
+        setTimeout(() => heart.remove(), 800);
       }
     }
   </script>
