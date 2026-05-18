@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Queen ✨</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;700&family=Padauk:wght@400;700&display=swap');
+
+        html, body {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            overflow: hidden; font-family: 'Montserrat', 'Padauk', sans-serif; color: white;
+        }
+
+        #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+        #memory-stack {
+            position: fixed; inset: 0;
+            display: flex; justify-content: center; align-items: center;
+            perspective: 2000px; z-index: 1;
+            transition: filter 1s ease;
+        }
+
+        .polaroid {
+            position: absolute; width: 220px; padding: 12px 12px 24px 12px;
+            background: white; border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            cursor: pointer; user-select: none;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .polaroid img { width: 100%; height: 200px; object-fit: cover; border-radius: 2px; pointer-events: none; }
+
+        #gift-wrapper {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            z-index: 10; text-align: center; cursor: pointer;
+        }
+
+        .gift-box { font-size: 5rem; animation: pulse 2s infinite ease-in-out; filter: drop-shadow(0 0 15px rgba(239,68,68,0.6)); }
+
+        .hint-text { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #ef4444; margin-top: 8px; font-weight: 700; }
+
+        #wish-card {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 85%; max-width: 340px; background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px; padding: 30px; text-align: center; z-index: 20;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2);
+            display: none; animation: cardOpen 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .romantic-title { font-family: 'Great Vibes', cursive; font-size: 3rem; color: #ff4d6d; margin-bottom: 5px; }
+        .romantic-name { font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; color: #fff; margin-bottom: 20px; }
+        #typing { font-size: 0.9rem; line-height: 1.7; color: #cbd5e1; text-align: left; min-height: 120px; word-wrap: break-word; }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes cardOpen { 0% { opacity: 0; transform: translate(-50%, -40%) scale(0.9); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles"></canvas>
+
+    <div id="memory-stack">
+        <div class="polaroid" style="transform: rotate(-10deg) translate(-20px, -30px);"><img id="imgFrame1" src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500"></div>
+        <div class="polaroid" style="transform: rotate(8deg) translate(30px, -15px);"><img id="imgFrame2" src="https://images.unsplash.com/photo-1512916193091-c58b7e24d5d2?w=500"></div>
+        <div class="polaroid" style="transform: rotate(-5deg) translate(-10px, 40px);"><img id="imgFrame3" src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=500"></div>
+    </div>
+
+    <div id="gift-wrapper" onclick="startSurprise()">
+        <div class="gift-box">🎁</div>
+        <div class="hint-text">Click to Open</div>
+    </div>
+
+    <div id="wish-card">
+        <div class="romantic-title">Merry Christmas</div>
+        <div class="romantic-name">Kay Kay</div>
+        <div id="typing"></div>
+    </div>
+
+    <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+    <script>
+        /* --- STUDIO PLATFORM DYNAMIC INTEGRATION ENGINE --- */
+        
+        // 1. Music Audio Control Slot ပါဝင်သော Layout Manifest ကို ပို့ပေးခြင်း
+        const templateManifest = {
+            type: 'REGISTER_MANIFEST',
+            schema: [
+                { id: 'queenName', type: 'text', label: 'ချစ်သူ/မွေးနေ့ရှင် အမည်', icon: 'fa-solid fa-heart', defaultValue: 'Kay Kay' },
+                { id: 'christmasWish', type: 'textarea', label: 'Christmas ဆုတောင်းစကား', icon: 'fa-solid fa-holly-berry', rows: 5, defaultValue: `Kay Kay လေးရေ... 🎄\n\n Litmatch ကနေ Kay Kay နဲ့ သိခွင့်ရခဲ့တာကို တကယ်ပဲ ဝမ်းသာမိပါတယ်။ နေရောင်ခြည်လို အမြဲတမ်း တောက်ပပြီး စိတ်ချမ်းသာပါစေလို့ ဆုတောင်းပေးပါတယ်။ နေ့ရက်တိုင်းကိုလည်း အမြဲတမ်းပျော်ရွင်နိုင်ပါစေ\n\n ပျော်ရွှင်စရာကောင်းတဲ့ Christmas လေး ဖြစ်ပါစေနော်။ ✨` },
+                { id: 'bgMusicTrack', type: 'audio', label: 'နောက်ခံသီချင်း (.mp3)', icon: 'fa-solid fa-music' },
+                { id: 'photo1', type: 'image', label: 'ဓာတ်ပုံ အမိုက်စား (၁)', icon: 'fa-solid fa-image' },
+                { id: 'photo2', type: 'image', label: 'ဓာတ်ပုံ အမိုက်စား (၂)', icon: 'fa-solid fa-image' },
+                { id: 'photo3', type: 'image', label: 'ဓာတ်ပုံ အမိုက်စား (၃)', icon: 'fa-solid fa-image' }
+            ]
+        };
+        window.parent.postMessage(templateManifest, '*');
+
+        // Dynamic Global State Variables
+        let dynamicQueenName = "Kay Kay";
+        let dynamicWishText = `Kay Kay လေးရေ... 🎄\n\n Litmatch ကနေ Kay Kay နဲ့ သိခွင့်ရခဲ့တာကို တကယ်ပဲ ဝမ်းသာမိပါတယ်။ နေရောင်ခြည်လို အမြဲတမ်း တောက်ပပြီး စိတ်ချမ်းသာပါစေလို့ ဆုတောင်းပေးပါတယ်။ နေ့ရက်တိုင်းကိုလည်း အမြဲတမ်းပျော်ရွင်နိုင်ပါစေ\n\n ပျော်ရွှင်စရာကောင်းတဲ့ Christmas လေး ဖြစ်ပါစေနော်။ ✨`;
+        let isSurpriseStarted = false;
+
+        // 2. Control Panel မှ Audio, Images နှင့် စာသားများကို ဖမ်းယူမည့် Event Listener
+        window.addEventListener('message', function(event) {
+            if (!event.data) return;
+            
+            if (event.data.type === 'UPDATE_DATA') {
+                const d = event.data.payload;
+                
+                if (d.queenName !== undefined) {
+                    dynamicQueenName = d.queenName;
+                    const nameEl = document.querySelector('.romantic-name');
+                    if (nameEl) nameEl.innerText = d.queenName;
+                }
+                
+                if (d.christmasWish !== undefined) {
+                    dynamicWishText = d.christmasWish;
+                    if (isSurpriseStarted) {
+                        const typingEl = document.getElementById('typing');
+                        if (typingEl) typingEl.innerHTML = d.christmasWish.replace(/\n/g, '<br>');
+                    }
+                }
+
+                // Real-time Audio Sync Engine
+                if (d.bgMusicTrack) {
+                    const audioEl = document.getElementById('bg-music');
+                    if (audioEl && audioEl.src !== d.bgMusicTrack) {
+                        audioEl.src = d.bgMusicTrack;
+                        // Gift Box ကို ဖွင့်ထားပြီးသား အခြေအနေမျိုးဆိုလျှင် သီချင်းအသစ်ကို ချက်ချင်း Play ပေးရန်
+                        if (isSurpriseStarted) audioEl.play().catch(()=>{});
+                    }
+                }
+
+                // Real-time Image Sync Engine
+                if (d.photo1) document.getElementById('imgFrame1').src = d.photo1;
+                if (d.photo2) document.getElementById('imgFrame2').src = d.photo2;
+                if (d.photo3) document.getElementById('imgFrame3').src = d.photo3;
+            }
+            
+            // Deployment Snapshot Generation Pipeline
+            if (event.data.type === 'REQUEST_SNAPSHOT') {
+                window.parent.postMessage({
+                    type: 'HTML_SNAPSHOT',
+                    html: document.documentElement.outerHTML
+                }, '*');
+            }
+        });
+
+        /* --- POLAROID INTERACTION MECHANIC --- */
+        const cards = document.querySelectorAll('.polaroid');
+        cards.forEach(card => {
+            let isDragging = false;
+            let startX, startY, currentX, currentY;
+            let initialRotation = parseFloat(card.style.transform.replace(/[^0-9\-.,]/g, '').split(',')[0]) || 0;
+
+            card.addEventListener('mousedown', startDrag);
+            card.addEventListener('touchstart', startDrag, { passive: true });
+
+            function startDrag(e) {
+                isDragging = true;
+                card.style.transition = 'none';
+                card.style.zIndex = '5';
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                startX = clientX - card.offsetLeft;
+                startY = clientY - card.offsetTop;
+
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('touchmove', drag, { passive: false });
+                document.addEventListener('mouseup', stopDrag);
+                document.addEventListener('touchend', stopDrag);
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                if (e.cancelable) e.preventDefault();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                
+                let container = document.getElementById('memory-stack');
+                let newX = clientX - container.offsetLeft - (card.offsetWidth / 2);
+                let newY = clientY - container.offsetTop - (card.offsetHeight / 2);
+
+                card.style.left = `${newX}px`;
+                card.style.top = `${newY}px`;
+                card.style.transform = `rotate(${initialRotation + (newX / 15)}deg) scale(1.05)`;
+            }
+
+            function stopDrag() {
+                if (!isDragging) return;
+                isDragging = false;
+                card.style.transition = 'transform 0.5s ease, z-index 0.5s step-end';
+                card.style.transform = `rotate(${initialRotation}deg) scale(1)`;
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('touchmove', drag);
+            }
+        });
+
+        /* --- SURPRISE MOMENT CORE FUNCTION --- */
+        async function startSurprise() {
+            isSurpriseStarted = true;
+            document.getElementById('bg-music').play().catch(() => {});
+            document.getElementById('memory-stack').style.filter = "blur(10px) brightness(0.4)";
+            document.getElementById('gift-wrapper').style.display = "none";
+            document.getElementById('wish-card').style.display = "block";
+
+            document.querySelector('.romantic-name').innerText = dynamicQueenName;
+
+            setInterval(() => {
+                confetti({ particleCount: 35, spread: 60, origin: { y: 0.75 } });
+            }, 1800);
+
+            let i = 0;
+            const target = document.getElementById('typing');
+            target.innerHTML = "";
+            
+            async function type() {
+                if (i < dynamicWishText.length) {
+                    if(dynamicWishText[i] !== undefined) {
+                        target.innerHTML += dynamicWishText[i] === '\n' ? '<br>' : dynamicWishText[i];
+                    }
+                    i++;
+                    setTimeout(type, 65);
+                }
+            }
+            type();
+        }
+
+        /* --- SNOW & SPARKLE CANVAS SYSTEM --- */
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for(let i=0; i<100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 1,
+                    speed: Math.random() * 0.8 + 0.4,
+                    velX: (Math.random() - 0.5) * 0.2,
+                    color: i % 2 === 0 ? "rgba(255, 215, 0, 0.4)" : "rgba(255, 255, 255, 0.6)"
+                });
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for(let p of particles) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+
+                p.y += p.speed;
+                p.x += p.velX;
+
+                if(p.y > canvas.height) { p.y = 0; p.x = Math.random() * canvas.width; }
+                if(p.x > canvas.width || p.x < 0) { p.x = Math.random() * canvas.width; }
+            }
+            requestAnimationFrame(drawParticles);
+        }
+
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        drawParticles();
+    </script>
+</body>
+</html>

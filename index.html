@@ -52,13 +52,19 @@
         @media (max-width: 1023px) {
             .preview-mobile {
                 width: 100% !important;
-                height: 100% !important;
+                height: 500px !important;
                 border: none !important;
                 border-radius: 0px !important;
                 box-shadow: none !important;
                 animation: none !important;
             }
             .preview-mobile::before { display: none !important; }
+            
+            .mobile-flex-stack {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1.5rem !important;
+            }
         }
 
         .preview-mobile iframe {
@@ -79,9 +85,38 @@
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300 overflow-x-hidden">
 
-    <div class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
+    <nav class="hidden lg:flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 sticky top-0 z-40 backdrop-blur-md bg-white/90 dark:bg-slate-900/90">
+        <div class="flex items-center space-x-3">
+            <div class="bg-gradient-to-r from-indigo-500 to-blue-600 w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                <i class="fa-solid fa-cubes text-sm"></i>
+            </div>
+            <span class="text-base font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">Template Studio Pro</span>
+            <span class="bg-indigo-500/10 text-indigo-500 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-500/20">v2.1</span>
+        </div>
         
-        <aside id="layoutSidebar" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl col-span-1 lg:col-span-3 space-y-4 max-h-[680px] overflow-y-auto">
+        <div class="flex items-center space-x-6 text-sm font-semibold text-slate-500 dark:text-slate-400">
+            <span class="text-indigo-500 dark:text-indigo-400 cursor-default flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i> Workspace</span>
+            <a href="#" class="hover:text-slate-900 dark:hover:text-white transition"></a>
+            <a href="#" class="hover:text-slate-900 dark:hover:text-white transition"></a>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-1.5 text-xs text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg font-medium">
+                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Engine Ready
+            </div>
+        </div>
+    </nav>
+
+    <header class="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <span class="text-sm font-bold bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">Template Studio Pro</span>
+        <button id="menuToggleButton" onclick="toggleMobileSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-950 active:scale-95 transition-transform">
+            <i id="menuToggleIcon" class="fa-solid fa-bars text-lg"></i>
+        </button>
+    </header>
+
+    <div class="flex-1 max-w-[1600px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-2 mobile-flex-stack">
+        
+        <aside id="layoutSidebar" class="hidden lg:block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl col-span-1 lg:col-span-3 space-y-4 max-h-[680px] overflow-y-auto z-30">
             <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-2">
                 <i class="fa-solid fa-folder-open text-blue-500"></i> Active Layouts
             </h2>
@@ -124,26 +159,7 @@
             </div>
         </aside>
 
-        <section id="modificationControlPanel" class="col-span-1 lg:col-span-4 space-y-4 opacity-0 hidden scale-95 panel-transition">
-            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col justify-between">
-                <div>
-                    <div class="bg-gradient-to-r from-indigo-500/10 to-blue-500/10 px-5 py-3 border-b border-slate-200 dark:border-slate-800">
-                        <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide flex items-center gap-1.5">
-                            <i class="fa-solid fa-pencil text-[10px]"></i> Customize Layout Studio
-                        </span>
-                    </div>
-                    <div id="dynamicFormContainer" class="p-5 space-y-5 max-h-[430px] overflow-y-auto"></div>
-                </div>
-
-                <div class="p-4 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30">
-                    <button id="deployBtn" onclick="generateVercelNativeRouteLink()" class="w-full bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2 text-sm">
-                        <i class="fa-solid fa-link"></i> <span id="deployBtnText">Website Link နှင့် QR ကုဒ် ရယူမည်</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <main id="previewViewportContainer" class="col-span-1 lg:col-span-9 flex flex-col items-center">
+        <main id="previewViewportContainer" class="col-span-1 lg:col-span-9 flex flex-col items-center w-full">
             <div class="w-full border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-2xl bg-slate-950 flex flex-col h-[550px] lg:h-[680px] relative">
                 
                 <div id="viewportBlanketOverlay" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-center p-6" style="transition: opacity 0.5s ease;">
@@ -160,6 +176,25 @@
                 </div>
             </div>
         </main>
+
+        <section id="modificationControlPanel" class="col-span-1 lg:col-span-3 w-full opacity-0 hidden scale-95 panel-transition z-10">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col justify-between">
+                <div>
+                    <div class="bg-gradient-to-r from-indigo-500/10 to-blue-500/10 px-5 py-3 border-b border-slate-200 dark:border-slate-800">
+                        <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide flex items-center gap-1.5">
+                            <i class="fa-solid fa-pencil text-[10px]"></i> Customize Layout Studio
+                        </span>
+                    </div>
+                    <div id="dynamicFormContainer" class="p-5 space-y-5 max-h-[430px] lg:max-h-[500px] overflow-y-auto"></div>
+                </div>
+
+                <div class="p-4 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/30">
+                    <button id="deployBtn" onclick="generateVercelNativeRouteLink()" class="w-full bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all transform active:scale-95 flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-link"></i> <span id="deployBtnText">Website Link နှင့် QR ကုဒ် ရယူမည်</span>
+                    </button>
+                </div>
+            </div>
+        </section>
 
     </div>
 
@@ -225,6 +260,19 @@
         let lastKnownSnapshotHTML = "";
         let qrCodeInstance = null;
 
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('layoutSidebar');
+            const toggleIcon = document.getElementById('menuToggleIcon');
+            
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                toggleIcon.classList.replace('fa-bars', 'fa-xmark');
+            } else {
+                sidebar.classList.add('hidden');
+                toggleIcon.classList.replace('fa-xmark', 'fa-bars');
+            }
+        }
+
         function switchTemplateFile(fileName, cardId) {
             activeSelectedFile = fileName;
             document.getElementById('previewIframe').src = fileName;
@@ -235,14 +283,22 @@
             });
             document.getElementById(cardId).className = "template-card p-4 rounded-xl border border-indigo-500 bg-indigo-600/10 dark:bg-indigo-600/5 cursor-pointer flex items-center space-x-3 group transition-all duration-300 shadow-md scale-[1.02]";
 
+            if (window.innerWidth < 1024) {
+                const sidebar = document.getElementById('layoutSidebar');
+                if (!sidebar.classList.contains('hidden')) {
+                    toggleMobileSidebar();
+                }
+            }
+
             if (!setupCompleted) {
                 setupCompleted = true;
                 const overlay = document.getElementById('viewportBlanketOverlay');
                 overlay.style.opacity = '0';
                 setTimeout(() => overlay.style.display = 'none', 500);
                 
-                document.getElementById('previewViewportContainer').classList.replace('lg:col-span-9', 'lg:col-span-5');
+                document.getElementById('previewViewportContainer').className = "col-span-1 lg:col-span-6 flex flex-col items-center w-full";
                 const controlPanel = document.getElementById('modificationControlPanel');
+                controlPanel.className = "col-span-1 lg:col-span-3 w-full panel-transition z-10";
                 controlPanel.classList.remove('hidden');
                 setTimeout(() => { controlPanel.classList.remove('opacity-0', 'scale-95'); }, 50);
             }
@@ -320,7 +376,6 @@
 
         document.getElementById('previewIframe').addEventListener('load', dispatchDataToIframe);
 
-        // 🚀 VERCEL CRYPTO ROUTING DEPLOY ENGINE (100% Client Stable)
         function generateVercelNativeRouteLink() {
             const deployBtn = document.getElementById('deployBtn');
             const deployBtnText = document.getElementById('deployBtnText');
@@ -331,7 +386,6 @@
                 let targetedLiveUrl = `${currentOrigin}/${activeSelectedFile}`;
                 
                 if (Object.keys(stateDataStorage).length > 0) {
-                    // JSON state data ကို ယူနီကုဒ်မပျက်စေဘဲ Base64 သို့ ကောင်းမွန်စွာ ပြောင်းလဲသယ်ဆောင်ခြင်း
                     const base64Payload = btoa(unescape(encodeURIComponent(JSON.stringify(stateDataStorage))));
                     targetedLiveUrl += `?studio_payload=${base64Payload}`;
                 }

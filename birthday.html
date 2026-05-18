@@ -26,7 +26,6 @@
         .title { font-size: 2rem; font-weight: 800; background: linear-gradient(to right, #f43f5e, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
         .subtitle { font-size: 1rem; color: #94a3b8; margin-bottom: 30px; }
         
-        /* 3D-ish Flat Interactive Cake */
         .cake-wrapper { width: 150px; height: 150px; margin: 0 auto 40px; position: relative; cursor: pointer; }
         .cake { position: absolute; bottom: 0; width: 100%; height: 60px; background: var(--cake-color); border-radius: 10px 10px 4px 4px; box-shadow: 0 8px 0 #e11d48; }
         .cream { position: absolute; top: -15px; width: 100%; height: 25px; background: var(--cream-color); border-radius: 20px; }
@@ -56,7 +55,7 @@
         <div class="letter-card" id="letter"></div>
     </div>
 
-    <audio id="bgMusic" loop><source src="music.mp3"></audio>
+    <audio id="bgMusic" loop preload="auto"></audio>
 
     <script>
         const templateManifest = {
@@ -65,16 +64,22 @@
                 { id: 'overlayText', type: 'text', label: 'စဖွင့်ချင်းစာသား', icon: 'fa-solid fa-comment', defaultValue: '🎂 မွေးနေ့ Surprise ရှိလို့ နှိပ်ကြည့်ပါဦး 🎁' },
                 { id: 'birthdayName', type: 'text', label: 'မွေးနေ့ရှင် အမည်', icon: 'fa-solid fa-user', defaultValue: 'Happy Birthday' },
                 { id: 'subText', type: 'text', label: 'ဆုတောင်းခေါင်းစဉ်တို', icon: 'fa-solid fa-star', defaultValue: 'Wishing you the best day ever!' },
-                { id: 'wishLetter', type: 'textarea', label: 'မွေးနေ့ဆုတောင်းမေတ္တာစာ', icon: 'fa-solid fa-cake-candles', rows: 4, defaultValue: 'မွေးနေ့မှစ၍ နောင်နှစ်ပေါင်းများစွာတိုင် ပျော်ရွှင်ချမ်းမြေ့ပါစေ။ လိုအင်ဆန္ဒဟူသမျှ ပြည့်ဝပြီး စိတ်ချမ်းသာကိုယ်ကျန်းမာရှိပါစေကြောင်း ဆုတောင်းပေးလိုက်ပါတယ်ခင်ဗျာ။ ✨' }
+                { id: 'wishLetter', type: 'textarea', label: 'မွေးနေ့ဆုတောင်းမေတ္တာစာ', icon: 'fa-solid fa-cake-candles', rows: 4, defaultValue: 'မွေးနေ့မှစ၍ နောင်နှစ်ပေါင်းများစွာတိုင် ပျော်ရွှင်ချမ်းမြေ့ပါစေ။ လိုအင်ဆန္ဒဟူသမျှ ပြည့်ဝပြီး စိတ်ချမ်းသာကိုယ်ကျန်းမာရှိပါစေကြောင်း ဆုတောင်းပေးလိုက်ပါတယ်ခင်ဗျာ။ ✨' },
+                { id: 'bgAudioData', type: 'audio', label: 'မွေးနေ့သီချင်းထည့်ရန်', icon: 'fa-solid fa-music' }
             ]
         };
         window.parent.postMessage(templateManifest, '*');
 
         let letterText = "";
+        
         function initEngine() {
             document.getElementById('overlay').style.opacity = '0';
             setTimeout(() => document.getElementById('overlay').style.display = 'none', 1000);
-            try { document.getElementById('bgMusic').play(); } catch(e){}
+            
+            const music = document.getElementById('bgMusic');
+            if (music && music.src) {
+                music.play().catch(err => console.log("Audio play deferred:", err));
+            }
             setInterval(spawnBalloon, 600);
         }
 
@@ -96,12 +101,16 @@
             setTimeout(() => b.remove(), 7000);
         }
 
+        // Live Data Binding (Both Studio & Exported Site)
         window.addEventListener('message', function(event) {
             if (event.data && event.data.type === 'UPDATE_DATA') {
                 const d = event.data.payload;
                 if(d.overlayText) document.getElementById('overlay').innerText = d.overlayText;
                 if(d.birthdayName) document.getElementById('nameDisplay').innerText = d.birthdayName;
                 if(d.subText) document.getElementById('subDisplay').innerText = d.subText;
+                if(d.bgAudioData) {
+                    document.getElementById('bgMusic').src = d.bgAudioData;
+                }
                 if(d.wishLetter) {
                     letterText = d.wishLetter;
                     if(document.getElementById('letter').style.display === 'block') {
@@ -111,16 +120,15 @@
             }
         });
 
-        // သက်ဆိုင်ရာ Template ဖိုင်များ (cv.html, blog.html စသည်) ထဲတွင် ထည့်ရန်ကုဒ်
-window.addEventListener('message', function(event) {
-    if (event.data && event.data.type === 'REQUEST_SNAPSHOT') {
-        // လက်ရှိ ပြင်ဆင်ထားသမျှ HTML ကုဒ်တစ်ခုလုံးကို Main Window ထံ ပြန်လည်ပေးပို့ခြင်း Pipeline
-        window.parent.postMessage({
-            type: 'HTML_SNAPSHOT',
-            html: document.documentElement.outerHTML
-        }, '*');
-    }
-});
+        // Live Snapshot Pipeline
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'REQUEST_SNAPSHOT') {
+                window.parent.postMessage({
+                    type: 'HTML_SNAPSHOT',
+                    html: document.documentElement.outerHTML
+                }, '*');
+            }
+        });
     </script>
 </body>
 </html>
