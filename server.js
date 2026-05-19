@@ -50,7 +50,8 @@ app.post('/api/generate-card', upload.single('image'), async (req, res) => {
         db[cardId] = payloadData;
 
         // QR Code ဆွဲရန် Link အတို ပြန်ပို့ပေးမည် (Deploy လုပ်လျှင် localhost နေရာတွင် Domain ပြောင်းပါ)
-        const shortUrl = `http://localhost:3000/view/${cardId}`;
+        // အခုလို ပြင်လိုက်ပါ
+       const shortUrl = `https://web-qrgenerate.onrender.com/view/${cardId}`;
         res.json({ success: true, url: shortUrl });
 
     } catch (error) {
