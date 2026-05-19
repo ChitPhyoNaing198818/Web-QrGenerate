@@ -29,7 +29,11 @@ mongoose.connect(MONGO_URI)
     .then(() => console.log("MongoDB Connected Successfully"))
     .catch(err => console.error("MongoDB Connection Error:", err));
 
-const CardSchema = new mongoose.Schema({ id: String, data: Object });
+// 🛠️ FIX 1: Defined data as Mixed type to guarantee MongoDB accepts customized data arrays & mutations
+const CardSchema = new mongoose.Schema({ 
+    id: String, 
+    data: mongoose.Schema.Types.Mixed 
+}, { minimize: false });
 const Card = mongoose.model('Card', CardSchema);
 
 cloudinary.config({
@@ -76,8 +80,12 @@ app.get('/view/:id', async (req, res) => {
         if (!card) return res.status(404).send("<h1>Card မတွေ့ပါ သို့မဟုတ် သက်တမ်းကုန်သွားပါပြီ။</h1>");
 
         const payloadString = Buffer.from(JSON.stringify(card.data)).toString('base64');
+        
+        // 🛠️ FIX 2: Wrapped the base64 string in encodeURIComponent to prevent URL parser bugs from converting '+' to spaces
+        const safePayload = encodeURIComponent(payloadString);
+        
         const templateName = card.data.templateName || "lovecard";
-        res.redirect(`/${templateName}.html?studio_payload=${payloadString}`);
+        res.redirect(`/${templateName}.html?studio_payload=${safePayload}`);
     } catch (e) {
         res.status(500).send("Server Error");
     }
