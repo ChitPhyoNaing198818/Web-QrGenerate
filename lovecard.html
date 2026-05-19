@@ -388,23 +388,30 @@
       }
     }
 
-    // URL Param TextDecoder handling
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('studio_payload')) {
-      try {
-        const base64 = urlParams.get('studio_payload');
-        const binaryString = atob(base64);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        const decodedString = new TextDecoder().decode(bytes);
-        const decoded = JSON.parse(decodedString);
-        applyStateUpdate(decoded);
-      } catch(e) { 
-        console.error("Payload decoding failed", e); 
-      }
+
+if (urlParams.has('studio_payload')) {
+  try {
+    const base64 = decodeURIComponent(urlParams.get('studio_payload'));
+
+    const binaryString = atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
     }
+
+    const decodedString = new TextDecoder().decode(bytes);
+    const data = JSON.parse(decodedString);
+
+    document.getElementById("title").innerText = data.title;
+    document.getElementById("message").innerText = data.message;
+    document.getElementById("img").src = data.image;
+
+  } catch(e) {
+    console.error("Payload decoding failed", e);
+  }
+}
 
     // Fixed Studio PostMessage Listeners
     window.addEventListener('message', (e) => {
