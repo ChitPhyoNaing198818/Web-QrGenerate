@@ -404,9 +404,7 @@ if (urlParams.has('studio_payload')) {
     const decodedString = new TextDecoder().decode(bytes);
     const data = JSON.parse(decodedString);
 
-    document.getElementById("title").innerText = data.title;
-    document.getElementById("message").innerText = data.message;
-    document.getElementById("img").src = data.image;
+    
 
   } catch(e) {
     console.error("Payload decoding failed", e);
