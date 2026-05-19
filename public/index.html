@@ -504,11 +504,10 @@
                     formData.append('image', pendingFiles[key]); 
                 }
 
-                // Node.js Backend သို့ လှမ်းပို့ခြင်း (Port 3000)
-                const response = await fetch('http://localhost:3000/api/generate-card', {
-                    method: 'POST',
-                    body: formData
-                });
+             const response = await fetch('https://web-qrgenerate.onrender.com/api/generate-card', {
+    method: 'POST',
+    body: formData
+});
 
                 const result = await response.json();
 

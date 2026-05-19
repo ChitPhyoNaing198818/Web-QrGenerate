@@ -10,9 +10,9 @@ app.use(cors());
 // --- အရေးကြီး: သင်၏ Cloudinary API Keys များကို ထည့်ပါ ---
 // https://cloudinary.com တွင် Free အကောင့်ဖွင့်ပြီး ယူနိုင်ပါသည်။
 cloudinary.config({
-  cloud_name: 'dltggapvz',
-  api_key: '853959617686651',
-  api_secret: '**********'
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
 });
 
 // ပုံတွေကို လက်ခံရန် ယာယီ Storage သတ်မှတ်ခြင်း
