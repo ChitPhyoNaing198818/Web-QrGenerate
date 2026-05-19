@@ -10,13 +10,11 @@ app.use(cors());
 app.use(express.json());
 
 // CSP Headers ထည့်သွင်းခြင်း
-app.use((req, res, next) => {
-    res.setHeader(
-        "Content-Security-Policy",
-        "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https://res.cloudinary.com; connect-src 'self' https://api.cloudinary.com https://web-qrgenerate.onrender.com;"
-    );
-    next();
-});
+// server.js ရှိ CSP Header ကို ဤသို့ ပြင်ပေးပါ
+res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https://res.cloudinary.com; connect-src 'self' https://api.cloudinary.com https://web-qrgenerate.onrender.com;"
+);
 
 // 1. MongoDB တိုက်ရိုက်ချိတ်ဆက်ခြင်း
 const MONGO_URI = "mongodb+srv://maungmaunglwin004_db_user:GjDGNOauVTy5OLok@alace.sywubyd.mongodb.net/?retryWrites=true&w=majority&appName=Alace";
@@ -32,7 +30,7 @@ const Card = mongoose.model('Card', CardSchema);
 cloudinary.config({
   cloud_name: "dltggapvz",
   api_key: "753576664531814",
-  api_secret: "*********************************"
+  api_secret: "ZR-_VdsL_ZqBliWo21AcS0eMWts"
   
 });
 
@@ -76,5 +74,8 @@ app.get('/view/:id', async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+
+// အခြား app.use များ၏ အောက်တွင် ထည့်ပါ
+app.use(express.static(__dirname));
 
 app.listen(3000, () => console.log('Server running on port 3000'));
