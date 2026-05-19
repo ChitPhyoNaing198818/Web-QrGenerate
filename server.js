@@ -19,8 +19,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// Static files အတွက် (HTML ဖိုင်များ)
-app.use(express.static(__dirname));
+
 
 // MongoDB နှင့် Cloudinary configs
 const MONGO_URI = "mongodb+srv://maungmaunglwin004_db_user:GjDGNOauVTy5OLok@alace.sywubyd.mongodb.net/?retryWrites=true&w=majority&appName=Alace";
@@ -91,6 +90,8 @@ app.get('/view/:id', async (req, res) => {
     }
 });
 
+// Static files အတွက် (HTML ဖိုင်များ)
+app.use(express.static(__dirname));
 // --- Port ပြင်ဆင်ချက် ---
 // Render ကဲ့သို့ Cloud Hosting များတွင် Error မတက်စေရန် process.env.PORT ကို သုံးရပါမည်
 const PORT = process.env.PORT || 3000;
