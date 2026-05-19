@@ -9,14 +9,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// CSP Headers ထည့်သွင်းခြင်း
-// server.js ရှိ CSP Header ကို ဤသို့ ပြင်ပေးပါ
-res.setHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https://res.cloudinary.com; connect-src 'self' https://api.cloudinary.com https://web-qrgenerate.onrender.com;"
-);
+// --- အမှားပြင်ထားသည့်နေရာ ---
+// CSP Header ကို middleware function အတွင်းသို့ ထည့်သွင်းပေးရပါမည်
+app.use((req, res, next) => {
+    res.setHeader(
+        "Content-Security-Policy",
+        "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https://res.cloudinary.com; connect-src 'self' https://api.cloudinary.com https://web-qrgenerate.onrender.com;"
+    );
+    next();
+});
+// ----------------------------
 
-// 1. MongoDB တိုက်ရိုက်ချိတ်ဆက်ခြင်း
+// Static files အတွက် (HTML ဖိုင်များ)
+app.use(express.static(__dirname));
+
+// MongoDB နှင့် Cloudinary configs (သင်၏ code အတိုင်း)
 const MONGO_URI = "mongodb+srv://maungmaunglwin004_db_user:GjDGNOauVTy5OLok@alace.sywubyd.mongodb.net/?retryWrites=true&w=majority&appName=Alace";
 
 mongoose.connect(MONGO_URI)
@@ -26,17 +33,15 @@ mongoose.connect(MONGO_URI)
 const CardSchema = new mongoose.Schema({ id: String, data: Object });
 const Card = mongoose.model('Card', CardSchema);
 
-// 2. Cloudinary တိုက်ရိုက်ချိတ်ဆက်ခြင်း
 cloudinary.config({
   cloud_name: "dltggapvz",
   api_key: "753576664531814",
   api_secret: "ZR-_VdsL_ZqBliWo21AcS0eMWts"
-  
 });
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-// 3. API - ပုံနှင့် Data လက်ခံခြင်း
+// Routes များ (သင်၏ code အတိုင်း)
 app.post('/api/generate-card', upload.single('image'), async (req, res) => {
     try {
         let imageUrl = '';
@@ -51,17 +56,13 @@ app.post('/api/generate-card', upload.single('image'), async (req, res) => {
         const payloadData = JSON.parse(req.body.payload || '{}');
         if (imageUrl) payloadData.img1 = imageUrl;
 
-        // MongoDB ထဲသို့ သိမ်းဆည်းခြင်း
         await new Card({ id: cardId, data: payloadData }).save();
-
         res.json({ success: true, url: `https://web-qrgenerate.onrender.com/view/${cardId}` });
     } catch (error) {
-        console.error("Upload Error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// 4. API - QR Scan ဖတ်လျှင် Redirect လုပ်ခြင်း
 app.get('/view/:id', async (req, res) => {
     try {
         const card = await Card.findOne({ id: req.params.id });
@@ -74,8 +75,5 @@ app.get('/view/:id', async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
-
-// အခြား app.use များ၏ အောက်တွင် ထည့်ပါ
-app.use(express.static(__dirname));
 
 app.listen(3000, () => console.log('Server running on port 3000'));
