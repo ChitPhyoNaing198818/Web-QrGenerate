@@ -1,0 +1,28 @@
+{
+  "name": "web-host-and-qr-generate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChitPhyoNaing198818/Web-QrGenerate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ChitPhyoNaing198818/Web-QrGenerate/issues"
+  },
+  "homepage": "https://github.com/ChitPhyoNaing198818/Web-QrGenerate#readme",
+  "dependencies": {
+    "cloudinary": "^2.10.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "uuid": "^14.0.0"
+  }
+}
