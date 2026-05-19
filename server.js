@@ -3,81 +3,69 @@ const cors = require('cors');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
-// --- အရေးကြီး: သင်၏ Cloudinary API Keys များကို ထည့်ပါ ---
-// https://cloudinary.com တွင် Free အကောင့်ဖွင့်ပြီး ယူနိုင်ပါသည်။
+// 1. MongoDB တိုက်ရိုက်ချိတ်ဆက်ခြင်း
+const MONGO_URI = "mongodb+srv://maungmaunglwin004_db_user:GjDGNOauVTy5OLok@alace.sywubyd.mongodb.net/?appName=Alace";
+
+mongoose.connect(MONGO_URI)
+    .then(() => console.log("MongoDB Connected Successfully"))
+    .catch(err => console.error("MongoDB Connection Error:", err));
+
+const CardSchema = new mongoose.Schema({ id: String, data: Object });
+const Card = mongoose.model('Card', CardSchema);
+
+// 2. Cloudinary တိုက်ရိုက်ချိတ်ဆက်ခြင်း
 cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET
+  cloud_name: "dltggapvz",
+  api_key: "753576664531814",
+  api_secret: "*********************************"
+  
 });
 
-// ပုံတွေကို လက်ခံရန် ယာယီ Storage သတ်မှတ်ခြင်း
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage: multer.memoryStorage() });
 
-// Database အစားထိုး ယာယီ မှတ်ဉာဏ် (တကယ့်အပြင်မှာ MongoDB သုံးရန် အကြံပြုပါသည်)
-const db = {};
-
-// Static ဖိုင်များ (HTML များကို) ဖွင့်ပေးရန် (သင့် HTML ဖိုင်များရှိသော Folder ကို ညွှန်းပါ)
-app.use(express.static('public')); // 'public' folder ထဲတွင် သင်၏ html များကို ထည့်ထားပါ
-
-// 1. Frontend မှ Data နှင့် ပုံကို လက်ခံမည့် API
+// 3. API - ပုံနှင့် Data လက်ခံခြင်း
 app.post('/api/generate-card', upload.single('image'), async (req, res) => {
     try {
         let imageUrl = '';
-        
-        // ပုံပါလာခဲ့လျှင် Cloudinary သို့ တင်မည်
         if (req.file) {
             const b64 = Buffer.from(req.file.buffer).toString("base64");
-            let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-            const result = await cloudinary.uploader.upload(dataURI, { resource_type: "auto" });
-            imageUrl = result.secure_url; // အင်တာနက်ပေါ်မှ ပုံ Link အစစ် ရပြီ
+            const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+            const result = await cloudinary.uploader.upload(dataURI);
+            imageUrl = result.secure_url;
         }
 
-        const cardId = uuidv4().slice(0, 8); // ID အတိုလေး ဖန်တီးမည်
-        
-        // Frontend မှ ပို့လိုက်သော JSON Data များကို ယူမည်
+        const cardId = uuidv4().slice(0, 8);
         const payloadData = JSON.parse(req.body.payload || '{}');
-        
-        // Cloudinary မှရသော ပုံ Link ကို Data ထဲပေါင်းထည့်မည်
-        if (imageUrl) payloadData.img1 = imageUrl; 
+        if (imageUrl) payloadData.img1 = imageUrl;
 
-        // Database ထဲ သိမ်းမည်
-        db[cardId] = payloadData;
+        // MongoDB ထဲသို့ သိမ်းဆည်းခြင်း
+        await new Card({ id: cardId, data: payloadData }).save();
 
-        // QR Code ဆွဲရန် Link အတို ပြန်ပို့ပေးမည် (Deploy လုပ်လျှင် localhost နေရာတွင် Domain ပြောင်းပါ)
-        // အခုလို ပြင်လိုက်ပါ
-       const shortUrl = `https://web-qrgenerate.onrender.com/view/${cardId}`;
-        res.json({ success: true, url: shortUrl });
-
+        res.json({ success: true, url: `https://web-qrgenerate.onrender.com/view/${cardId}` });
     } catch (error) {
         console.error("Upload Error:", error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
 
-// 2. QR ကို စကင်ဖတ်လျှင် သက်ဆိုင်ရာ Template သို့ Redirect လုပ်ပေးမည့် API
-app.get('/view/:id', (req, res) => {
-    const data = db[req.params.id];
-    
-    if (!data) {
-        return res.status(404).send("<h1>Card မတွေ့ပါ သို့မဟုတ် သက်တမ်းကုန်သွားပါပြီ။</h1>");
+// 4. API - QR Scan ဖတ်လျှင် Redirect လုပ်ခြင်း
+app.get('/view/:id', async (req, res) => {
+    try {
+        const card = await Card.findOne({ id: req.params.id });
+        if (!card) return res.status(404).send("<h1>Card မတွေ့ပါ သို့မဟုတ် သက်တမ်းကုန်သွားပါပြီ။</h1>");
+
+        const payloadString = Buffer.from(JSON.stringify(card.data)).toString('base64');
+        const templateName = card.data.templateName || "lovecard";
+        res.redirect(`/${templateName}.html?studio_payload=${payloadString}`);
+    } catch (e) {
+        res.status(500).send("Server Error");
     }
-
-    // သင့်မူလ HTML များ နားလည်စေရန် Data ကို Base64 ပြန်ပြောင်းမည်
-    const payloadString = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-    
-    // Template အမည် (ဥပမာ - lovecard, christmas)
-    const templateName = data.templateName || "lovecard"; 
-    
-    // မူလ Template ဆီသို့ Payload တွဲလျက် အလိုအလျောက် ပို့ပေးမည်
-    res.redirect(`/${templateName}.html?studio_payload=${payloadString}`);
 });
 
-app.listen(3000, () => {
-    console.log('Backend server is running on http://localhost:3000');
-});
+app.listen(3000, () => console.log('Server running on port 3000'));
