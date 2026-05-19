@@ -9,6 +9,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// CSP Headers ထည့်သွင်းခြင်း
+app.use((req, res, next) => {
+    res.setHeader(
+        "Content-Security-Policy",
+        "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https://res.cloudinary.com; connect-src 'self' https://api.cloudinary.com https://web-qrgenerate.onrender.com;"
+    );
+    next();
+});
+
 // 1. MongoDB တိုက်ရိုက်ချိတ်ဆက်ခြင်း
 const MONGO_URI = "mongodb+srv://maungmaunglwin004_db_user:GjDGNOauVTy5OLok@alace.sywubyd.mongodb.net/?retryWrites=true&w=majority&appName=Alace";
 
