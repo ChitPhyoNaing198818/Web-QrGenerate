@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // 1. MongoDB တိုက်ရိုက်ချိတ်ဆက်ခြင်း
-const MONGO_URI = "mongodb+srv://maungmaunglwin004_db_user:GjDGNOauVTy5OLok@alace.sywubyd.mongodb.net/?appName=Alace";
+const MONGO_URI = "mongodb+srv://maungmaunglwin004_db_user:GjDGNOauVTy5OLok@alace.sywubyd.mongodb.net/?retryWrites=true&w=majority&appName=Alace";
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log("MongoDB Connected Successfully"))
